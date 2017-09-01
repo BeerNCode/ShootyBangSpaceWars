@@ -3,10 +3,10 @@ from vector import Vector
 import math
 
 class Thing(pygame.sprite.Sprite):
-    """ A thing with mass and physical properties """
+    """A thing with mass and physical properties"""
 
     def __init__(self):
-        """ Construcz """
+        """Construcz"""
         super().__init__()
         self.pos = Vector(50, 50)
         self.vel = Vector(0, 0)
@@ -18,15 +18,15 @@ class Thing(pygame.sprite.Sprite):
         self.damage = 0
 
     def update(self):
+        """updated the physics of the thing"""
         self.pos.add(self.vel)
         self.rpos += self.rvel
-        if (self.rpos < 0):
+        if self.rpos < 0:
             self.rpos = 2*math.pi
-        if (self.rpos > 2*math.pi):
+        if self.rpos > 2*math.pi:
             self.rpos = 0
 
-        # self.rpos = self.rpos % 2*math.pi
-        print("Ship is at ",self.rpos,"rad with rvel of ", self.rvel)
+        print("Ship is at ", self.rpos, "rad with rvel of ", self.rvel)
 
         self.rect.x = self.pos.x-self.radius
         self.rect.y = self.pos.y-self.radius

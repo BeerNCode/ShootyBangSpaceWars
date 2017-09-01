@@ -17,11 +17,13 @@ class Ship(Thing):
         self.rect = self.image.get_rect()
 
     def update(self):
-
         keys=pygame.key.get_pressed()
         if keys[pygame.K_LEFT]: #this will be done with torque
             self.rpos -= 0.1
         if keys[pygame.K_RIGHT]:
             self.rpos += 0.1
+        if keys[pygame.K_UP]:
+            thrust = Vector.fromAngle(self.rpos)*100;
+            self.add_force(thrust)
 
         super().update()

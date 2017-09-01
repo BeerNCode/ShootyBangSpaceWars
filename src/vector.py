@@ -25,3 +25,7 @@ class Vector:
     def angle(self):
         """ returns the angle between (1, 0) and this vector """
         return math.atan2(self.x, self.y)
+
+    @staticmethod
+    def fromAngle(angle):
+        return Vector(math.cos(angle), math.sin(angle))
