@@ -9,4 +9,5 @@ class Planet():
         self.mass = mass
 
     def show(self, screen):
-        pygame.draw.ellipse(screen, (182, 52, 18), [self.pos.x, self.pos.y, self.radius, self.radius], 2)
+        print("showing planet at "+str(self.pos.x)+" "+str(self.pos.y))
+        pygame.draw.ellipse(screen, (255, 255, 255), [self.pos.x, self.pos.y, self.radius, self.radius], 2)

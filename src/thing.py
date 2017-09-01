@@ -11,7 +11,7 @@ class Thing(pygame.sprite.Sprite):
         self.pos = Vector(0, 0)
         self.vel = Vector(0, 0)
         self.rpos = 0
-        self.rvel = 0.0000001
+        self.rvel = 0.1
         self.mass = 0
 
     def update(self):
