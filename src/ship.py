@@ -26,5 +26,6 @@ class Ship(Thing):
         if keys[pygame.K_UP]:
             thrust = Vector.fromAngle(self.rpos).mult(10)
             self.addForce(thrust)
+        
 
         super().update()
