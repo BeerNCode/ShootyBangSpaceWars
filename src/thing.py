@@ -12,7 +12,8 @@ class Thing(pygame.sprite.Sprite):
         self.vel = Vector(0, 0)
         self.rpos = 0
         self.rvel = 0.1
-        self.mass = 0
+        self.mass = 1
+        self.rmass = 1
 
     def update(self):
         self.pos.add(self.vel)
@@ -40,3 +41,9 @@ class Thing(pygame.sprite.Sprite):
 
     def show(self, screen):
         pygame.draw.ellipse(screen, WHITE, [x, 20, 250, 100], 2)
+        
+    def addTorqe(self, torque):
+        self.rvel = self.rvel + Torque/rmass)
+        
+    def addForce(self, forceVect):
+        self.vel = self.vel.add(force/mass)
