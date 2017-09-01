@@ -3,34 +3,37 @@ from vector import Vector
 import math
 
 class Thing(pygame.sprite.Sprite):
-    """ A thing with mass and physical properties """
+    """A thing with mass and physical properties"""
 
     def __init__(self):
-        """ Construcz """
+        """Construcz"""
         super().__init__()
         self.pos = Vector(50, 50)
         self.vel = Vector(0, 0)
         self.rpos = 0
-        self.rvel = 0.1
-        self.mass = 0
+        self.rvel = 0
+        self.mass = 100
+        self.radius = 16
         self.size = 0
         self.damage = 0
 
     def update(self):
-        self.pos.add(self.vel)
+        """updated the physics of the thing"""
+        print("pos", str(self.pos.x), str(self.pos.y))
+        print("vel", str(self.vel.x), str(self.vel.y))
+        self.pos = self.pos.add(self.vel)
         self.rpos += self.rvel
-        if (self.rpos < 0):
+        if self.rpos < 0:
             self.rpos = 2*math.pi
-        if (self.rpos > 2*math.pi):
+        if self.rpos > 2*math.pi:
             self.rpos = 0
 
-        # self.rpos = self.rpos % 2*math.pi
-        print("Ship is at ",self.rpos,"rad with rvel of ", self.rvel)
+        print("Ship is at ", self.rpos, "rad with rvel of ", self.rvel)
 
-        self.rect.x = self.pos.x
-        self.rect.y = self.pos.y
-        self.image = pygame.transform.rotate(self.original_image, self.rpos * 180 / math.pi)
-        self.rect.center = self.image.get_rect().center
+        self.image = pygame.transform.rotate(self.original_image, -self.rpos * 180 / math.pi)
+        self.rect = self.image.get_rect()
+        self.rect.x = self.pos.x-self.rect.width/2
+        self.rect.y = self.pos.y-self.rect.height/2
 
     def update_gravity(self, masses):
         acc = Vector(0,0)
@@ -42,3 +45,9 @@ class Thing(pygame.sprite.Sprite):
 
     def show(self, screen):
         pygame.draw.ellipse(screen, WHITE, [x, 20, 250, 100], 2)
+        
+    def addTorqe(self, torque):
+        self.rvel = self.rvel + (torque/self.rmass)
+        
+    def addForce(self, force):
+        self.vel = self.vel.add(force.mult(1/self.mass))
