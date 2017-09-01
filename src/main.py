@@ -18,20 +18,30 @@ clock = pygame.time.Clock()
 x = 0
 
 done = False
+ships = []
+ships.append(Ship())
+
 while not done:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
             screen.fill(WHITE)
     
-    pygame.draw.line(screen, GREEN, [0, 0], [100, 100], 5)
+    screen.fill(BLACK)
 
-    font = pygame.font.SysFont('Calibri', 25, True, False)
-    text = font.render("Shooter Bang Space Wars", True, WHITE)
-    screen.blit(text, [250, 250])
+    group = pygame.sprite.Group()
+    for ship in ships:
+        ship.update()
+        group.add(ship)
 
-    pygame.draw.ellipse(screen, WHITE, [x, 20, 250, 100], 2)
-    x += 1
+    group.draw(screen)
+
+    # font = pygame.font.SysFont('Calibri', 25, True, False)
+    # text = font.render("Shooter Bang Space Wars", True, WHITE)
+    # screen.blit(text, [250, 250])
+
+    # pygame.draw.ellipse(screen, WHITE, [x, 20, 250, 100], 2)
+    # x += 1
     pygame.display.flip()
  
     clock.tick(60)
