@@ -11,17 +11,11 @@ class Thing(pygame.sprite.Sprite):
         self.pos = Vector(50, 50)
         self.vel = Vector(0, 0)
         self.rpos = 0
-<<<<<<< HEAD
-        self.rvel = 0.1
-        self.mass = 1
-        self.rmass = 1
-=======
         self.rvel = 0
         self.mass = 0
         self.radius = 16
         self.size = 0
         self.damage = 0
->>>>>>> ee73079188b5d2aff55dced11ffc2df60076f204
 
     def update(self):
         """updated the physics of the thing"""
