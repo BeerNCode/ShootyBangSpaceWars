@@ -1,4 +1,4 @@
-
+import pygame
 
 class Planet():
     """ A large object which can impart gravity onto stuff """
@@ -9,4 +9,4 @@ class Planet():
         self.mass = mass
 
     def show(self, screen):
-        pygame.draw.ellipse(screen, (182, 52, 18), [100, 100, 250, 100], 2)
+        pygame.draw.ellipse(screen, (182, 52, 18), [self.pos.x, self.pos.y, self.radius, self.radius], 2)

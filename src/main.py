@@ -1,6 +1,9 @@
 import pygame
 import time
 from ship import Ship
+from planet import Planet
+from vector import Vector
+from time import sleep
 
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
@@ -21,8 +24,8 @@ x = 0
 done = False
 
 planets = []
-for i in 0:10:
-    planets.append(Planet())
+for i in range(0,10):
+    planets.append(Planet(10, 10, Vector(500, 500)))
 
 ships = []
 ships.append(Ship())
@@ -36,8 +39,8 @@ while not done:
     screen.fill(BLACK)
 
     # Update the game physics
-    for ship in ships:
-        ship.update_gravity()
+    # for ship in ships:
+        # ship.update_gravity()
 
     # Update the game state and prepare the sprites
     group = pygame.sprite.Group()
@@ -46,7 +49,7 @@ while not done:
         group.add(ship)
 
     for planet in planets:
-        planet.show()
+        planet.show(screen)
 
     group.draw(screen)
 
@@ -57,8 +60,8 @@ while not done:
     # pygame.draw.ellipse(screen, WHITE, [x, 20, 250, 100], 2)
     # x += 1
     pygame.display.flip()
-    sleep(0.2)
+    # sleep(0.2)
  
-    clock.tick(60)
+    clock.tick(30)
  
 pygame.quit()
