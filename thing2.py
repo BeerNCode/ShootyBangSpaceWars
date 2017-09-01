@@ -1,8 +1,7 @@
-import pygame
 
-class Thing(pygame.sprite.Sprite):
+class Thing:
     """ A thing with mass and physical properties """
-    
+
     self.pos = Vector(0, 0)
     self.vel = Vector(0, 0)
     self.rpos = 0
@@ -11,7 +10,6 @@ class Thing(pygame.sprite.Sprite):
 
     def __init__(self):
         """ Construcz """
-        super().__init__()
 
     def update(self):
         self.pos.add(self.vel)
