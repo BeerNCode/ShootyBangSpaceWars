@@ -13,6 +13,11 @@ Ideas:
 - Energy depletes through use
 
 # Tasks
-Get a basic window up and running
-Multiplayer
-Sprites
+- Get a basic window up and running.
+- Spacestation bases.
+- Gravity.
+- Energy distribution.
+- Weapons.
+- Awesome music.
+- Multiplayer.
+- Sprites.
