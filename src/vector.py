@@ -1,3 +1,5 @@
+import math
+
 class Vector:
     self.x = 0
     self.y = 0
@@ -11,3 +13,13 @@ class Vector:
 
     def sub(self, other):
         return Vector(self.x-other.x, self.y-other.y)
+
+    def mult(self, value):
+        return Vector(self.x*value, self.y*value)
+
+    def mag(self):
+        return math.sqrt(self.x*self.x + self.y*self.y)
+
+    def angle(self):
+        """ returns the angle between (1, 0) and this vector """
+        return math.atan2(self.x, self.y)
