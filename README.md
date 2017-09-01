@@ -11,7 +11,7 @@ Ideas:
 - Choose to allocate energy to shield, weapon or thrusters
 - Energy recovers quicker around light due to solar panels.
 - Energy depletes through use
-- space anomolies e.g. blackholes.
+- space anomolies e.g. blackholes, light bursts.
 
 # Tasks
 - Get a basic window up and running.
