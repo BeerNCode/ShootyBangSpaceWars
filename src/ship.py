@@ -18,13 +18,16 @@ class Ship(Thing):
         self.rect = self.image.get_rect()
 
     def update(self):
+        firing = False
         keys=pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
-            self.rpos -= 0.1
+            self.rvel -= 0.1
         if keys[pygame.K_RIGHT]:
-            self.rpos += 0.1
+            self.rvel += 0.1
         if keys[pygame.K_UP]:
             thrust = Vector.fromAngle(self.rpos).mult(10)
             self.addForce(thrust)
-
+        if keys[pygame.K_SPACE]:
+            b = Slug(self.pos,self.vel)
+            firing = True
         super().update()
