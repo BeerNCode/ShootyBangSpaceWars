@@ -1,5 +1,6 @@
 import pygame
 import time
+import math
 import random
 from ship import Ship
 from planet import Planet
@@ -29,7 +30,7 @@ done = False
 
 planets = []
 for i in range(0,10):
-    planets.append(Planet(100, 10, Vector(random.random()*SCREEN_WIDTH, random.random()*SCREEN_HEIGHT)))
+    planets.append(Planet(random.random()*100+20, 10, Vector(random.random()*SCREEN_WIDTH, random.random()*SCREEN_HEIGHT)))
 
 ships = []
 ship = Ship()
@@ -51,6 +52,7 @@ while not done:
     group = pygame.sprite.Group()
     for ship in ships:
         ship.update()
+        pygame.draw.line(screen, GREEN, [ship.pos.x, ship.pos.y], [ship.pos.x+math.cos(ship.rpos)*100, ship.pos.y+math.sin(ship.rpos)*100])
         group.add(ship)
 
     for planet in planets:

@@ -1,5 +1,7 @@
 ## ShootyBangSpaceWars
 
+When in space... you die.
+
 # Summary
 
 Ideas:

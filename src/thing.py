@@ -32,8 +32,8 @@ class Thing(pygame.sprite.Sprite):
 
         self.image = pygame.transform.rotate(self.original_image, -self.rpos * 180 / math.pi)
         self.rect = self.image.get_rect()
-        self.rect.x = self.pos.x-self.radius
-        self.rect.y = self.pos.y-self.radius
+        self.rect.x = self.pos.x-self.rect.width/2
+        self.rect.y = self.pos.y-self.rect.height/2
 
     def update_gravity(self, masses):
         acc = Vector(0,0)
