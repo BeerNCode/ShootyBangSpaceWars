@@ -25,3 +25,9 @@ class Vector:
     def angle(self):
         """ returns the angle between (1, 0) and this vector """
         return math.atan2(self.x, self.y)
+
+    def dot(self,other):
+        return self.x*other.x+self.y*other.y
+
+    def cross(self,other):
+        return self.x*other.y - self.y*other.x
