@@ -13,6 +13,8 @@ class Thing(pygame.sprite.Sprite):
         self.rpos = 0
         self.rvel = 0.0000001
         self.mass = 0
+        self.size = 0
+        self.damage = 0
 
     def update(self):
         self.pos.add(self.vel)
