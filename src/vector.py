@@ -18,6 +18,9 @@ class Vector:
 
     def mag(self):
         return math.sqrt(self.x*self.x + self.y*self.y)
+    
+    def normalise(self):
+        return self.mult(self, 1/math.sqrt(self.x*self.x + self.y*self.y))
 
     def angle(self):
         """ returns the angle between (1, 0) and this vector """

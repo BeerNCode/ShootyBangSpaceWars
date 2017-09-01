@@ -1,4 +1,5 @@
 import pygame
+import time
 from ship import Ship
 
 BLACK = (0, 0, 0)
@@ -43,6 +44,7 @@ while not done:
     # pygame.draw.ellipse(screen, WHITE, [x, 20, 250, 100], 2)
     # x += 1
     pygame.display.flip()
+    sleep(0.2)
  
     clock.tick(60)
  
