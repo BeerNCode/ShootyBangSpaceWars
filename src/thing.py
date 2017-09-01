@@ -4,7 +4,6 @@ import math
 
 class Thing(pygame.sprite.Sprite):
     """ A thing with mass and physical properties """
-    
 
     def __init__(self):
         """ Construcz """
@@ -12,7 +11,7 @@ class Thing(pygame.sprite.Sprite):
         self.pos = Vector(0, 0)
         self.vel = Vector(0, 0)
         self.rpos = 0
-        self.rvel = 0
+        self.rvel = 0.0000001
         self.mass = 0
 
     def update(self):
@@ -22,13 +21,14 @@ class Thing(pygame.sprite.Sprite):
 
         self.rect.x = self.pos.x
         self.rect.y = self.pos.y
-        self.image = pygame.transform.rotate(self.original_image, self.rpos * math.pi / 180)
+        self.image = pygame.transform.rotate(self.original_image, self.rpos * 180 / math.pi)
 
     def update_gravity(self, masses):
-        acc = vector(0,0)
+        acc = Vector(0,0)
         for thing in masses:
-            separation = thing.pos - self.pos
-            acc.add(thing.mass * separation.normalise()/(separation.mag*separation.mag))
+            separation = thing.pos.sub(self.pos)
+            m = separation.mag()
+            acc.add(thing.mass * separation.normalise()/(m*m))
         self.vel.add(acc)
 
     def show(self, screen):

@@ -18,6 +18,11 @@ clock = pygame.time.Clock()
 x = 0
 
 done = False
+
+planets = []
+for i in 0:10:
+    planets.append(Planet())
+
 ships = []
 ships.append(Ship())
 
@@ -29,10 +34,18 @@ while not done:
     
     screen.fill(BLACK)
 
+    # Update the game physics
+    for ship in ships:
+        ship.update_gravity()
+
+    # Update the game state and prepare the sprites
     group = pygame.sprite.Group()
     for ship in ships:
         ship.update()
         group.add(ship)
+
+    for planet in planets:
+        planet.show()
 
     group.draw(screen)
 
