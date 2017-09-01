@@ -8,7 +8,7 @@ class Thing(pygame.sprite.Sprite):
     def __init__(self):
         """ Construcz """
         super().__init__()
-        self.pos = Vector(0, 0)
+        self.pos = Vector(50, 50)
         self.vel = Vector(0, 0)
         self.rpos = 0
         self.rvel = 0.1
@@ -17,11 +17,18 @@ class Thing(pygame.sprite.Sprite):
     def update(self):
         self.pos.add(self.vel)
         self.rpos += self.rvel
-        self.rpos = self.rpos % 2*math.pi
+        if (self.rpos < 0):
+            self.rpos = 2*math.pi
+        if (self.rpos > 2*math.pi):
+            self.rpos = 0
+
+        # self.rpos = self.rpos % 2*math.pi
+        print("Ship is at ",self.rpos,"rad with rvel of ", self.rvel)
 
         self.rect.x = self.pos.x
         self.rect.y = self.pos.y
-        self.image = pygame.transform.rotate(self.original_image, self.rpos)
+        self.image = pygame.transform.rotate(self.original_image, self.rpos * 180 / math.pi)
+        self.rect.center = self.image.get_rect().center
 
     def update_gravity(self, masses):
         acc = Vector(0,0)
