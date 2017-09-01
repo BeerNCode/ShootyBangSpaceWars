@@ -16,15 +16,8 @@ class Ship(Thing):
         self.image = self.original_image
         self.rect = self.original_image.get_rect()
 
-        self.pos = Vector(0, 0)
-        self.vel = Vector(1, 0)
-        self.rpos = 0
-        self.rvel = 0.5
-
     def update(self):
-        self.pos.add(self.vel)
-        self.rpos += self.rvel
-        self.rpos = self.rpos % 2*math.pi
+        super().update()
 
         self.rect.x = self.pos.x
         self.rect.y = self.pos.y
