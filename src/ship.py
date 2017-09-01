@@ -1,6 +1,6 @@
 from vector import Vector 
 
-class Ship:
+class Ship(Thing):
     """ Ship It """
     self.pos = Vector(0, 0)
     self.vel = Vector(0, 0)
