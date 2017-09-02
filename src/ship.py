@@ -12,11 +12,21 @@ class Ship(Thing):
     def __init__(self):
         """ Construcz """
         Thing.__init__(self)
-        self.original_image = pygame.image.load("../img/base spaceship.png").convert()
-        self.original_image = pygame.transform.rotate(self.original_image, -90)
-        self.original_image.set_colorkey(WHITE)
+        self.sprites = {}
+        self.add_sprite("base", "../img/spaceship.png", WHITE)
+        self.add_sprite("thrust", "../img/spaceship_thrust.png", WHITE)
+        self.set_sprite("base")
         self.image = self.original_image
         self.rect = self.image.get_rect()
+
+    def add_sprite(self, id, filePath, background):
+        sp = pygame.image.load(filePath).convert()
+        sp = pygame.transform.rotate(sp, -90)
+        sp.set_colorkey(background)
+        self.sprites[id] = sp
+
+    def set_sprite(self, id):
+        self.original_image = self.sprites[id]
 
     def update(self):
         firing = False
@@ -28,8 +38,11 @@ class Ship(Thing):
         if keys[pygame.K_RIGHT]:
             self.rvel += 0.001
         if keys[pygame.K_UP]:
+            self.set_sprite("thrust")
             thrust = Vector.fromAngle(self.rpos).mult(10)
             self.addForce(thrust)
+        else:
+            self.set_sprite("base")
         if keys[pygame.K_SPACE]:
             b.append(Slug(self.pos,self.vel.add(Vector.fromAngle(self.rpos).mult(2)), self.rpos))
             firing = True

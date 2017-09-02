@@ -48,6 +48,8 @@ class Damage():
             #apply damage
             thing.damage += thingVelInDir*planet.mass
             thing.vel = thing.vel.sub(dir.normalise().mult(1*thingVelInDir*(planet.mass)/(thing.mass+planet.mass)))
+            thing.vel = thing.vel.mult(0.95)
+            thing.rvel *= 0.95
           
             
             

@@ -10,7 +10,7 @@ from damage import Damage
 from slug import Slug
 
 SCREEN_WIDTH = 1024
-SCREEN_HEIGHT = 768
+SCREEN_HEIGHT = 576
 
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
@@ -18,11 +18,15 @@ GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 
 pygame.init()
- 
+
+
+
 size = (SCREEN_WIDTH, SCREEN_HEIGHT)
-screen = pygame.display.set_mode(size)
- 
+screen = pygame.display.set_mode(size, pygame.RESIZABLE)
+bg = pygame.image.load("../img/backdrop.png")
+
 pygame.display.set_caption("Shooty Bang Space Wars")
+
 
 clock = pygame.time.Clock()
 
@@ -45,6 +49,16 @@ while not done:
         if event.type == pygame.QUIT:
             done = True
             screen.fill(WHITE)
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                done = True
+                screen.fill(WHITE)
+        if event.type == pygame.VIDEORESIZE:
+            # The main code that resizes the window:
+            # (recreate the window with the new size)
+            screen = pygame.display.set_mode((event.w, event.h),
+                                              pygame.RESIZABLE)
+            
     
     # Update the game physics
     # for ship in ships:
@@ -52,6 +66,8 @@ while not done:
 
     # Update the game state and prepare the sprites
     screen.fill(BLACK)
+    screen.blit(bg, (0,0))
+
     sprites = pygame.sprite.Group()
     for ship in ships:
         ship.update_gravity(planets)
