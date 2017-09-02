@@ -136,7 +136,7 @@ menu controls
 		- energy (double)
 		- damage (double)
 	- Bullets[]
-		-pos
+		- pos
 			- x (double)
 			- y (double)
 			- angle (double)
