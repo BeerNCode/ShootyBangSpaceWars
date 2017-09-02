@@ -7,6 +7,7 @@ import socket
 from client import Client
 from threading import Thread
 from ship import Ship
+from spline import Spline
 from planet import Planet
 from lightSource import LightSource
 from vector import Vector
@@ -23,7 +24,7 @@ class Program:
 
     SCREEN_WIDTH = 1024
     SCREEN_HEIGHT = 768
-    GAME_SPEED = 1
+    GAME_SPEED = 30
     HOST = "localhost"
     PORT = 15007
 
@@ -49,6 +50,8 @@ class Program:
         self.map_limits = Limits(Vector(0, 0), Vector(globals.MAP_WIDTH, globals.MAP_HEIGHT))
         self.running = True
         self.viewport = Viewport(Vector(self.SCREEN_WIDTH/2, self.SCREEN_HEIGHT/2), self.SCREEN_WIDTH, self.SCREEN_HEIGHT)
+        globals.MAP_WIDTH = self.SCREEN_WIDTH
+        globals.MAP_HEIGHT = self.SCREEN_HEIGHT
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         
         if self.server:
