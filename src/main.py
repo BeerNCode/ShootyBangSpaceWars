@@ -6,6 +6,7 @@ from ship import Ship
 from planet import Planet
 from vector import Vector
 from time import sleep
+from slug import Slug
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
@@ -33,6 +34,7 @@ for i in range(0,10):
     planets.append(Planet(random.random()*100+20, 10, Vector(random.random()*SCREEN_WIDTH, random.random()*SCREEN_HEIGHT)))
 
 ships = []
+bullets = []
 ship = Ship()
 ships.append(ship)
 
@@ -49,17 +51,26 @@ while not done:
 
     # Update the game state and prepare the sprites
     screen.fill(BLACK)
-    group = pygame.sprite.Group()
+    sprites = pygame.sprite.Group()
     for ship in ships:
+<<<<<<< HEAD
         ship.update_gravity(planets)
         ship.update()
+=======
+        newBullets = ship.update()
+        if newBullets:
+            for bullet in newBullets:
+                bullets.append(bullet)
+>>>>>>> fd6ea6eceb3c18033afe704c79143a23b6e2ed56
         pygame.draw.line(screen, GREEN, [ship.pos.x, ship.pos.y], [ship.pos.x+math.cos(ship.rpos)*100, ship.pos.y+math.sin(ship.rpos)*100])
-        group.add(ship)
+        sprites.add(ship)
+    for bullet in bullets:
+        sprites.add(bullet)
 
     for planet in planets:
         planet.show(screen)
 
-    group.draw(screen)
+    sprites.draw(screen)
 
     font = pygame.font.SysFont('Calibri', 25, True, False)
     text = font.render(str(frames), True, WHITE)
