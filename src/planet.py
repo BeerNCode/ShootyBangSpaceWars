@@ -1,4 +1,5 @@
 import pygame
+import random
 
 WHITE = (255, 255, 255)
 TRANSPARENT = (0,0,0,0)
@@ -16,6 +17,7 @@ P3 = pygame.Rect(135,135,65,65)
 P4 = pygame.Rect(0,135,65,65)
 P5 = pygame.Rect(65,135,65,65)
 P6 = pygame.Rect(135,135,65,65)
+PLANETS = [ASTEROID,MERCURY,VENUS,EARTH,MARS,JUPITER,SUN,P1,P2,P3,P4,P5,P6]
 class Planet(pygame.sprite.Sprite):
     """ A large object which can impart gravity onto stuff """
 
@@ -25,14 +27,14 @@ class Planet(pygame.sprite.Sprite):
         self.radius = radius
         self.mass = mass
         self.sprites = {}
-        self.add_sprite("base", "../img/planets.png",WHITE)
+        self.add_sprite("base", "../img/planets_transparent.png",WHITE)
         self.set_sprite("base")
         self.image = self.original_image
         self.rect = self.image.get_rect()
 
     def add_sprite(self, id, filePath, background):
-        sp = pygame.image.load(filePath).convert()
-        sp.set_clip(SUN) #Locate the sprite 
+        sp = pygame.image.load(filePath).convert_alpha()
+        sp.set_clip(random.choice(PLANETS)) #Locate the sprite 
         sp = sp.subsurface(sp.get_clip()) 
         #sp = pygame.transform.rotate(sp, 0)
         sp = pygame.transform.scale(sp,[int(round(self.radius*2)),int(round(self.radius*2))])
