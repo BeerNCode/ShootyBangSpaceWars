@@ -18,6 +18,7 @@ class Ship(Thing):
         self.set_sprite("base")
         self.image = self.original_image
         self.rect = self.image.get_rect()
+        self.energy = 88
 
     def add_sprite(self, id, filePath, background):
         sp = pygame.image.load(filePath).convert()
@@ -45,5 +46,9 @@ class Ship(Thing):
         if keys[pygame.K_SPACE]:
             b.append(Slug(self.pos,self.vel.add(Vector.fromAngle(self.rpos).mult(2)), self.rpos))
             firing = True
+
         super().update()
         return b
+
+    def show(self, screen):
+        pygame.draw.rect(screen, (100, 0, 100), [self.pos.x-16, self.pos.y+16, self.energy*32/100, 5], 0)
