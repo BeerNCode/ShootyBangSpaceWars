@@ -104,14 +104,14 @@ class Program:
                 self.render()
 
                 if not self.server:
-                    self.screen.blit(globals.Fonts.TITLE.render(str(self.frames), True, Colours.WHITE), [Program.SCREEN_WIDTH-100, 10])
-                    self.screen.blit(globals.Fonts.TITLE.render(str(self.player.damage), True, Colours.WHITE), [Program.SCREEN_WIDTH-100, 20])
+                    self.screen.blit(globals.Fonts.TITLE.render(str(self.frames), True, globals.WHITE), [Program.SCREEN_WIDTH-100, 10])
+                    self.screen.blit(globals.Fonts.TITLE.render(str(self.player.damage), True, globals.WHITE), [Program.SCREEN_WIDTH-100, 20])
 
                 pygame.display.flip()
             except Exception:
                 exc_type, exc_value, exc_traceback = sys.exc_info()
                 traceback.print_exception(exc_type, exc_value, exc_traceback)
-                return
+                sys.exit()
             self.frames+=1
             self.clock.tick(Program.GAME_SPEED)
 
@@ -125,10 +125,9 @@ class Program:
                 decoded_data = json.JSONDecoder().decode(data)
                 if decoded_data["type"] == "map":
                     self.planets.clear()
-                    for jjplanet in decoded_data["planets"]:
-                        jplanet = json.JSONDecoder().decode(jjplanet)
-                        print("planet", type(jplanet))
-                        self.planets.append(Planet(jplanet["radius"], jplanet["mass"], jplanet["pos"]))
+                    for jplanet in decoded_data["planets"]:
+                        p = Vector(jplanet["pos"]["x"], jplanet["pos"]["y"])
+                        self.planets.append(Planet(jplanet["radius"], jplanet["mass"],p))
                 elif decoded_data["type"] == "update":
                     print("Update recieved from server.")
                     jships = decoded_data["ships"]
@@ -216,14 +215,14 @@ class Program:
             if event.type == pygame.QUIT:
                 print("Quitting the game")
                 self.running = False
-                self.screen.fill(Colours.WHITE)
+                self.screen.fill(globals.WHITE)
             if event.type == pygame.VIDEORESIZE:
                 self.screen = pygame.display.set_mode((event.w, event.h),
                                                   pygame.RESIZABLE) 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     done = True
-                    self.screen.fill(Colours.WHITE)
+                    self.screen.fill(globals.WHITE)
 
     def render(self):
         self.screen.fill(globals.BLACK)
