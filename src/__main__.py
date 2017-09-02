@@ -8,6 +8,7 @@ from client import Client
 from threading import Thread
 from ship import Ship
 from planet import Planet
+from lightSource import LightSource
 from vector import Vector
 from time import sleep
 from damage import Damage
@@ -45,6 +46,7 @@ class Program:
         self.ships = []
         self.slugs = []
         self.planets = []
+        self.lightSources = []
         self.frames = 0
         self.map_limits = Limits(Vector(0, 0), Vector(5000, 5000))
         self.running = True
@@ -60,10 +62,14 @@ class Program:
             self.listenThread.start()
             self.player = Ship()
             self.ships.append(self.player)
+            for iq in range(0,3):
+                self.planets.append(Planet(random.random()*100+50, 400, Vector(random.random()*Program.SCREEN_WIDTH, random.random()*Program.SCREEN_HEIGHT)))
+            self.lightSources.append(LightSource(Vector(300,300),1000))
             # Need to get the map from the server
     def loadMap(self):
             for iq in range(0,3):
                 self.planets.append(Planet(random.random()*100+50, 400, Vector(random.random()*Program.SCREEN_WIDTH, random.random()*Program.SCREEN_HEIGHT)))
+            self.lightSources.append(LightSource(Vector(100,100),1))
 
     def run(self):
         while self.running:
@@ -140,6 +146,7 @@ class Program:
     def updateShips(self):
         for ship in self.ships:
             ship.update_gravity(self.planets)
+            ship.update_regen(self.lightSources)
             for planet in self.planets:
                 Damage.determineThingPlanetDamage(ship, planet)
             newSlugs = ship.update()
