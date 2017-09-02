@@ -53,10 +53,15 @@ while not done:
     screen.fill(BLACK)
     sprites = pygame.sprite.Group()
     for ship in ships:
+<<<<<<< HEAD
+        ship.update_gravity(planets)
+        ship.update()
+=======
         newBullets = ship.update()
         if newBullets:
             for bullet in newBullets:
                 bullets.append(bullet)
+>>>>>>> fd6ea6eceb3c18033afe704c79143a23b6e2ed56
         pygame.draw.line(screen, GREEN, [ship.pos.x, ship.pos.y], [ship.pos.x+math.cos(ship.rpos)*100, ship.pos.y+math.sin(ship.rpos)*100])
         sprites.add(ship)
     for bullet in bullets:
