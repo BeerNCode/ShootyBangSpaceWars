@@ -16,7 +16,7 @@ Ideas:
 - space anomolies e.g. blackholes, light bursts.
 
 # Tasks
-- Get a basic window up and running.
+- Get a basic window up and running. DONE
 - Spacestation bases.
 - Gravity.
 - Energy distribution.
@@ -24,3 +24,20 @@ Ideas:
 - Awesome music.
 - Multiplayer.
 - Sprites.
+- View Panning TJD
+
+# Controls
+- up arrow - move forward
+- left arrow - runs thruster on the left
+- right arrow - runs thruster on the right
+
+- Q - increase energy on weapons
+- W - increase energy on shields
+- E - increase energy on thrusters
+- A - decrease energy on weapons
+- S - decrease energy on shields
+- D - decrease energy on thrusters
+
+- Spacebar - Shoot
+
+- Esc - Open menu
