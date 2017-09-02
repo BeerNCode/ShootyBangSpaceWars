@@ -135,9 +135,7 @@ class Ship(Thing):
     def update_regen(self, lightSources):
         if (self.energy <= ENERGYCAP*2):
             for LightSource in lightSources:
-                print("called")
                 self.energy = self.energy + LightSource.get_energy(self.pos)
-                print("charging",LightSource.get_energy(self.pos))
     
 
     def showStatus(self, screen, index):
