@@ -9,7 +9,6 @@ class State():
         self.ships = ships
         self.bullets = bullets
         
-
 class Ship():
 
     @staticmethod
@@ -62,13 +61,6 @@ class Planet():
         self.mass = mass
         self.radius = radius
         self.type = type
-
-    
-
-
-
-
-
 
 class Controls():
     def __init__(self, left=False, right=False, forward=False, shoot=False):
