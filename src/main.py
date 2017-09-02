@@ -35,8 +35,8 @@ x = 0
 done = False
 
 planets = []
-for i in range(0,2):
-    planets.append(Planet(50, 1000, Vector(random.random()*SCREEN_WIDTH, random.random()*SCREEN_HEIGHT)))
+for i in range(0,4):
+    planets.append(Planet(50, 200, Vector(random.random()*SCREEN_WIDTH, random.random()*SCREEN_HEIGHT)))
 
 ships = []
 slugs = []
@@ -82,6 +82,11 @@ while not done:
 
     for slug in slugs:
         slug.update_gravity(planets)
+        for planet in planets:
+            vec = slug.pos.sub(planet.pos)
+            mag = vec.mag()
+            if mag < planet.radius:
+                slugs.remove(slug)
         slug.update()
         sprites.add(slug)
 
