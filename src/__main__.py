@@ -142,7 +142,7 @@ class Program:
             path = Spline(ship,self.planets)
             splinePoints = path.get_prediction(60)
             for Vector in splinePoints:
-                pygame.draw.rect(self.screen, globals.WHITE, [Vector.x, Vector.y, 1, 1], 0)
+                pygame.draw.rect(self.screen, globals.WHITE, [Vector.x -self.rect.width/2 + self.viewport.getMidPoint().x , Vector.y, 1, 1], 0)
             ship.showStatus(self.screen, idx)
             sprites.add(ship)
         for slug in self.slugs:
@@ -150,7 +150,7 @@ class Program:
             sprites.add(slug)
         for planet in self.planets:
             planet.render(self.viewport)
-            planet.update()
+            #planet.update()
             sprites.add(planet)
         sprites.draw(self.screen)
 
