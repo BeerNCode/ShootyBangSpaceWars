@@ -51,6 +51,7 @@ while not done:
     screen.fill(BLACK)
     group = pygame.sprite.Group()
     for ship in ships:
+        ship.update_gravity(planets)
         ship.update()
         pygame.draw.line(screen, GREEN, [ship.pos.x, ship.pos.y], [ship.pos.x+math.cos(ship.rpos)*100, ship.pos.y+math.sin(ship.rpos)*100])
         group.add(ship)
