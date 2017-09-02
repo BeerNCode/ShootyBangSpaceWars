@@ -10,14 +10,8 @@ from time import sleep
 from damage import Damage
 from slug import Slug
 from limits import Limits
-
-SCREEN_WIDTH = 1024
-SCREEN_HEIGHT = 768
-
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
-GREEN = (0, 255, 0)
-RED = (255, 0, 0)
+from viewport import Viewport
+import globals
 
 pygame.init()
 
@@ -26,11 +20,15 @@ FONTS["title"] = pygame.font.SysFont('Calibri', 25, True, False)
 font = pygame.font.SysFont('Calibri', 25, True, False) # This will be deprecated and replaced with a dictionary of fonts for the theme
 
 clock = pygame.time.Clock()
-pygame.display.set_caption("Shooty Bang Space Wars")
-size = (SCREEN_WIDTH, SCREEN_HEIGHT)
-screen = pygame.display.set_mode(size, pygame.RESIZABLE)
 
 class Program():
+	# These must always be odd numbers, I think.
+    SCREEN_WIDTH = 1024
+    SCREEN_HEIGHT = 768
+
+    pygame.display.set_caption("Shooty Bang Space Wars")
+    screenSize = (SCREEN_WIDTH, SCREEN_HEIGHT)
+    screen = pygame.display.set_mode(screenSize, pygame.RESIZABLE)
 
     def __init__(self, server):
         if server:
@@ -42,12 +40,13 @@ class Program():
         self.slugs = []
         self.planets = []
         self.frames = 0
-        self.map_limits = Limits(Vector(0, 0), Vector(5000, 5000))
+        self.map_limits = Limits(Vector(0, 0), Vector(globals.MAP_WIDTH, globals.MAP_HEIGHT))
         self.running = True
+        self.viewport = Viewport(Vector(self.SCREEN_WIDTH/2, self.SCREEN_HEIGHT/2), self.SCREEN_WIDTH, self.SCREEN_HEIGHT)
         
         if self.server:
             for iq in range(0,3):
-                self.planets.append(Planet(20, 400, Vector(random.random()*SCREEN_WIDTH, random.random()*SCREEN_HEIGHT)))
+                self.planets.append(Planet(20, 400, Vector(random.random()*globals.MAP_WIDTH, random.random()*globals.MAP_HEIGHT)))
         else:
             self.player = Ship()
             self.ships.append(self.player)
@@ -61,8 +60,8 @@ class Program():
             self.render()
             
             if not self.server:
-                screen.blit(font.render(str(self.frames), True, WHITE), [SCREEN_WIDTH-100, 10])
-                screen.blit(font.render(str(self.player.damage), True, WHITE), [SCREEN_WIDTH-100, 20])
+                self.screen.blit(font.render(str(self.frames), True, globals.WHITE), [self.SCREEN_WIDTH-100, 10])
+                self.screen.blit(font.render(str(self.player.damage), True, globals.WHITE), [self.SCREEN_WIDTH-100, 40])
 
             pygame.display.flip()
             self.frames+=1
@@ -84,17 +83,21 @@ class Program():
                     screen.fill(WHITE)
 
     def render(self):
-        screen.fill(BLACK)
+        self.screen.fill(globals.BLACK)
         sprites = pygame.sprite.Group()
-        for ship in self.ships:
-            ship.show(screen)
+        self.viewport.updateMidPoint(self.player.pos)
+        for idx, ship in enumerate(self.ships):
+            ship.render(self.viewport)
+            ship.showStatus(self.screen, idx)
             sprites.add(ship)
         for slug in self.slugs:
+            slug.render(self.viewport)
             sprites.add(slug)
         for planet in self.planets:
+            planet.render(self.viewport)
             planet.update()
             sprites.add(planet)
-        sprites.draw(screen)
+        sprites.draw(self.screen)
 
     def updateShips(self):
         for ship in self.ships:

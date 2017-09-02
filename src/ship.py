@@ -76,13 +76,16 @@ class Ship(Thing):
         super().update()
         return b
 
-    def show(self, screen):
-        bar_width = 32
-        bar_height = 5
-        bar_margin = 1
+    def showStatus(self, screen, index):
+        bar_width = 75
+        bar_height = 8
+        bar_margin = 5
+        bar_step = 40 * index + 8
+        text_fudge_height = 20;
+
         font = pygame.font.SysFont('Calibri', 12, True, False)
-        screen.blit(font.render(self.id, True, WHITE), [self.pos.x-self.radius, self.pos.y-self.radius-15])
+        screen.blit(font.render(self.id, True, WHITE), [bar_step, 10])
         if self.energy > 0:
-            pygame.draw.rect(screen, ENERGY_COLOUR, [self.pos.x-self.radius, self.pos.y+self.radius, self.energy*32/100, bar_height], 0)
+            pygame.draw.rect(screen, ENERGY_COLOUR, [bar_step, text_fudge_height + bar_margin, self.energy*bar_width/100, bar_height], 0)
         if self.hull > 0:
-            pygame.draw.rect(screen, HEALTH_COLOUR, [self.pos.x-self.radius, self.pos.y+self.radius+bar_height+bar_margin, self.hull*32/100, bar_height], 0)
+            pygame.draw.rect(screen, HEALTH_COLOUR, [bar_step, text_fudge_height + 2 * bar_margin + bar_height, self.hull*bar_width/100, bar_height], 0)

@@ -80,6 +80,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\globals.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="src\damage.py" />
     <Compile Include="src\limits.py" />
     <Compile Include="src\map.py" />
@@ -88,6 +91,9 @@
     <Compile Include="src\slug.py" />
     <Compile Include="src\thing.py" />
     <Compile Include="src\vector.py" />
+    <Compile Include="src\viewport.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="src\__init__.py" />
     <Compile Include="src\__main__.py" />
   </ItemGroup>
