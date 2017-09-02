@@ -6,6 +6,7 @@ from ship import Ship
 from planet import Planet
 from vector import Vector
 from time import sleep
+from damage import Damage
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
@@ -30,7 +31,7 @@ done = False
 
 planets = []
 for i in range(0,10):
-    planets.append(Planet(random.random()*100+20, 10, Vector(random.random()*SCREEN_WIDTH, random.random()*SCREEN_HEIGHT)))
+    planets.append(Planet(random.random()*10+20, 100, Vector(random.random()*SCREEN_WIDTH, random.random()*SCREEN_HEIGHT)))
 
 ships = []
 ship = Ship()
@@ -54,6 +55,8 @@ while not done:
         ship.update()
         pygame.draw.line(screen, GREEN, [ship.pos.x, ship.pos.y], [ship.pos.x+math.cos(ship.rpos)*100, ship.pos.y+math.sin(ship.rpos)*100])
         group.add(ship)
+        for planet in planets:
+            Damage.determineThingPlanetDamage(ship,planet)
 
     for planet in planets:
         planet.show(screen)
