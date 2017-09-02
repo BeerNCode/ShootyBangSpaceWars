@@ -75,8 +75,6 @@ class Program:
             self.listenThread.start()
             self.player = Ship()
             self.ships.append(self.player)
-            for iq in range(0,3):
-                self.planets.append(Planet(random.random()*100+50, 400, Vector(random.random()*globals.MAP_WIDTH, random.random()*globals.MAP_HEIGHT)))
             self.lightSources.append(LightSource(Vector(300,300),1000))
 
     def loadMap(self):
@@ -91,29 +89,29 @@ class Program:
             # else:
             #     print("CLIENT: "+str(self.frames))
             try:
-                self.updateEvents()
-                if not self.running:
+            self.updateEvents()
+            if not self.running:
                     print("No more looping..")
-                    break
+                break
             
-                    if self.server:
-                        self.updateShips()
-                        self.updateSlugs()
-                        self.sendClientsUpdate()
-                    else:
-                        self.sendServerUpdate()
+                if self.server:
+            self.updateShips()
+            self.updateSlugs()
+                    self.sendClientsUpdate()
+                else:
+                    self.sendServerUpdate()
 
-                    self.render()
+            self.render()
             
-                if not self.server:
-                    self.screen.blit(globals.Fonts.TITLE.render(str(self.frames), True, Colours.WHITE), [Program.SCREEN_WIDTH-100, 10])
-                    self.screen.blit(globals.Fonts.TITLE.render(str(self.player.damage), True, Colours.WHITE), [Program.SCREEN_WIDTH-100, 20])
+            if not self.server:
+                    self.screen.blit(globals.Fonts.TITLE.render(str(self.frames), True, globals.WHITE), [Program.SCREEN_WIDTH-100, 10])
+                    self.screen.blit(globals.Fonts.TITLE.render(str(self.player.damage), True, globals.WHITE), [Program.SCREEN_WIDTH-100, 20])
 
-                pygame.display.flip()
+            pygame.display.flip()
             except Exception:
                 exc_type, exc_value, exc_traceback = sys.exc_info()
                 traceback.print_exception(exc_type, exc_value, exc_traceback)
-                return
+                sys.exit()
             self.frames+=1
             self.clock.tick(Program.GAME_SPEED)
 
@@ -127,10 +125,9 @@ class Program:
                 decoded_data = json.JSONDecoder().decode(data)
                 if decoded_data["type"] == "map":
                     self.planets.clear()
-                    for jjplanet in decoded_data["planets"]:
-                        jplanet = json.JSONDecoder().decode(jjplanet)
-                        print("planet", type(jplanet))
-                        self.planets.append(Planet(jplanet["radius"], jplanet["mass"], jplanet["pos"]))
+                    for jplanet in decoded_data["planets"]:
+                        p = Vector(jplanet["pos"]["x"], jplanet["pos"]["y"])
+                        self.planets.append(Planet(jplanet["radius"], jplanet["mass"],p))
                 elif decoded_data["type"] == "update":
                     print("Update recieved from server.")
                     jships = decoded_data["ships"]
@@ -218,35 +215,35 @@ class Program:
             if event.type == pygame.QUIT:
                 print("Quitting the game")
                 self.running = False
-                self.screen.fill(Colours.WHITE)
+                self.screen.fill(globals.WHITE)
             if event.type == pygame.VIDEORESIZE:
                 self.screen = pygame.display.set_mode((event.w, event.h),
                                                   pygame.RESIZABLE) 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     done = True
-                    self.screen.fill(Colours.WHITE)
+                    self.screen.fill(globals.WHITE)
 
     def render(self):
         self.screen.fill(globals.BLACK)
         sprites = pygame.sprite.Group()
         if not self.server:
-            self.viewport.updateMidPoint(self.player.pos)
-            for idx, ship in enumerate(self.ships):
-                ship.render(self.viewport)
-                path = Spline(ship,self.planets)
-                splinePoints = path.get_prediction(30)
-                for RenderablePoint in splinePoints:
-                    RenderablePoint.render(self.viewport)
-                    sprites.add(RenderablePoint)
-                sprites.add(ship)
-            for slug in self.slugs:
-                slug.render(self.viewport)
-                sprites.add(slug)
-            for planet in self.planets:
-                planet.render(self.viewport)
-                sprites.add(planet)
-            sprites.draw(self.screen)
+        self.viewport.updateMidPoint(self.player.pos)
+        for idx, ship in enumerate(self.ships):
+            ship.render(self.viewport)
+            path = Spline(ship,self.planets)
+            splinePoints = path.get_prediction(30)
+            for RenderablePoint in splinePoints:
+                RenderablePoint.render(self.viewport)
+                sprites.add(RenderablePoint)
+            sprites.add(ship)
+        for slug in self.slugs:
+            slug.render(self.viewport)
+            sprites.add(slug)
+        for planet in self.planets:
+            planet.render(self.viewport)
+            sprites.add(planet)
+        sprites.draw(self.screen)
 
     def updateShips(self):
         for client in self.clients:

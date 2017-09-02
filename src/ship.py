@@ -27,6 +27,7 @@ class Ship(Thing):
         """ Construcz """
         Thing.__init__(self)
         self.sprites = {}
+        self.name = "ship"
         self.add_sprite("base", "../img/BaseSpaceship.png", WHITE)
         self.add_sprite("thrust", "../img/BaseSpaceshipForward.png", WHITE)
         self.add_sprite("Clockwise", "../img/BaseSpaceshipLeft.png", WHITE)
@@ -58,11 +59,11 @@ class Ship(Thing):
         self.original_image = self.sprites[id]
 
     def setInputs(self, keys):
-        self.key_up = keys["up"]
-        self.key_down = keys["down"]
-        self.key_left = keys["left"]
-        self.key_right = keys["right"]
-        self.key_space = keys["space"]
+        self.key_up = keys.up
+        self.key_down = keys.down
+        self.key_left = keys.left
+        self.key_right = keys.right
+        self.key_space = keys.space
 
     def getInputs(self):
         keys = pygame.key.get_pressed()
@@ -184,4 +185,4 @@ class Ship(Thing):
         bar_height = 8
         bar_margin = 5
         bar_step = 40 * index + 8
-        text_fudge_height = 20;
+        text_fudge_height = 20
