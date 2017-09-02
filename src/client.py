@@ -19,9 +19,13 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 def connect():
     s.connect((HOST, PORT))
     s.send(bytes('Hello, world', 'UTF-8'))
-    data = s.recv(1024)
+
+    while True:
+        data = s.recv(1024)
+        print('Received', repr(data))
+
+def disconnect():
     s.close()
-    print('Received', repr(data))
 
 connect()
 # pygame.init()
