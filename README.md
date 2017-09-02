@@ -1,6 +1,6 @@
 ## ShootyBangSpaceWars
 
-When in space... you die.
+As a freelance space pilot you know of all the threats that can be lurking behind every asteroid and planet, however you never could have expected what was ahead of you as the galaxy seems to implode and brings some of the most ferocious pilots together for one final face off. Your survival will be dependent completely on your skills as a pilot. Good luck.
 
 # Summary
 
@@ -14,6 +14,8 @@ Ideas:
 - Energy recovers quicker around light due to solar panels.
 - Energy depletes through use
 - space anomolies e.g. blackholes, light bursts.
+- varying game modes.
+- damage will effect how much energy you can put in each department. (random)
 
 # Tasks
 - Get a basic window up and running. DONE
