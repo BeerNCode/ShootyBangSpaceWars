@@ -66,7 +66,7 @@ class Program:
         
         if self.server:
             for iq in range(0,3):
-                self.planets.append(Planet(20, 400, Vector(random.random()*globals.MAP_WIDTH, random.random()*globals.MAP_HEIGHT)))
+                self.planets.append(Planet(20, 40, Vector(random.random()*globals.MAP_WIDTH, random.random()*globals.MAP_HEIGHT)))
             self.loadMap()
             self.clients = []
             self.newClientsThread = Thread(target=self.listenForNewClients)
@@ -138,10 +138,14 @@ class Program:
                         ship = next((s for s in self.ships if s.name == jship["name"]), None)
                         if ship is None:
                             ship = Ship()# add info
-                            self.ships.append(ship)
+                            ship.name = jship['name']
                         else:
                             #update info
                             ship.pos.x = 0
+                            ship.pos.x = jship['pos']['x']
+                            ship.pos.y = jship['pos']['x']
+                            ship.rpos = jship['pos']['r']
+                        newShips.append(ship)
                     self.ships = newShips
 
     def listenForNewClients(self):
