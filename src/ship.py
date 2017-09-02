@@ -23,6 +23,8 @@ class Ship(Thing):
         self.sprites = {}
         self.add_sprite("base", "../img/spaceship.png", WHITE)
         self.add_sprite("thrust", "../img/spaceship_thrust.png", WHITE)
+        self.add_sprite("thrustClockwise", "../img/spaceship_thrust.png", WHITE)
+        self.add_sprite("thrustAClockwise", "../img/spaceship_thrust.png", WHITE)
         self.set_sprite("base")
         self.image = self.original_image
         self.rect = self.image.get_rect()
@@ -44,8 +46,12 @@ class Ship(Thing):
         b = []
         keys=pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
+            self.set_sprite("thrustAClockwise")
+            self.energy -= THRUST_ENERGY/2
             self.rvel -= TURN_ACC
         if keys[pygame.K_RIGHT]:
+            self.set_sprite("thrustClockwise")
+            self.energy -= THRUST_ENERGY/2
             self.rvel += TURN_ACC
         if keys[pygame.K_UP]:
             if self.energy >= THRUST_ENERGY:
