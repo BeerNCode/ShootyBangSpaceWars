@@ -41,8 +41,13 @@ Ideas:
 - D - decrease energy on thrusters
 
 - Spacebar - Shoot
-
+- Tab - Open up scoreboard
 - Esc - Open menu
+
+menu controls
+- up - move up selection
+- down - move down selection
+- enter - select
 
 # Energy
 - 5 points of energy
@@ -66,3 +71,12 @@ Ideas:
   - level 3 - medium
   - level 4 - medium / fast
   - level 5 - fast
+  
+  # Sound files
+  Advised that it'll be finished by 2pm. 
+  - thrusters
+  - lasers
+  - shield
+  - explosion
+  - crash
+  - background music
