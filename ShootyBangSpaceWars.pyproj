@@ -14,7 +14,8 @@
     <LaunchProvider>Standard Python launcher</LaunchProvider>
     <InterpreterId />
     <IsWindowsApplication>False</IsWindowsApplication>
-    <CommandLineArguments>server</CommandLineArguments>
+    <InterpreterArguments>
+    </InterpreterArguments>
     <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
