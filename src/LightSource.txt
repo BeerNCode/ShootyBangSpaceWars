@@ -1,0 +1,18 @@
+from vector import Vector
+
+class LightSource():
+    """ Ship It """
+
+    def __init__(self, pos, intensity):
+        		
+		""" Construcz """
+				
+		self.position = vector()
+		self.intensity
+		
+	def get_energy(self, shippos)
+		
+		separation = (self.position.sub(shippos))
+		energy = self.intensity/(separation*separation)
+		return energy
+	
