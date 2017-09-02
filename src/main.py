@@ -9,8 +9,8 @@ from time import sleep
 from damage import Damage
 from slug import Slug
 
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
+SCREEN_WIDTH = 1024
+SCREEN_HEIGHT = 768
 
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
@@ -32,7 +32,7 @@ done = False
 
 planets = []
 for i in range(0,2):
-    planets.append(Planet(random.random()*1000+100, 1000, Vector(random.random()*SCREEN_WIDTH, random.random()*SCREEN_HEIGHT)))
+    planets.append(Planet(50, 1000, Vector(random.random()*SCREEN_WIDTH, random.random()*SCREEN_HEIGHT)))
 
 ships = []
 slugs = []
@@ -65,6 +65,7 @@ while not done:
         sprites.add(ship)
 
     for slug in slugs:
+        slug.update_gravity(planets)
         slug.update()
         sprites.add(slug)
 

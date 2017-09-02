@@ -30,7 +30,7 @@ class Ship(Thing):
             thrust = Vector.fromAngle(self.rpos).mult(10)
             self.addForce(thrust)
         if keys[pygame.K_SPACE]:
-            b.append(Slug(self.pos,self.vel.add(Vector.fromAngle(self.rpos).mult(20)), self.rpos))
+            b.append(Slug(self.pos,self.vel.add(Vector.fromAngle(self.rpos).mult(2)), self.rpos))
             firing = True
         super().update()
         return b
