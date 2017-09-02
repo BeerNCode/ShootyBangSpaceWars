@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import json
 import pygame
 import time
@@ -240,7 +241,6 @@ class Program:
             for RenderablePoint in splinePoints:
                 RenderablePoint.render(self.viewport)
                 sprites.add(RenderablePoint)
-            ship.showStatus(self.screen, idx)
             sprites.add(ship)
         for slug in self.slugs:
             slug.render(self.viewport)
