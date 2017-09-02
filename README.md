@@ -1,6 +1,6 @@
 ## ShootyBangSpaceWars
 
-Idea of the game is to destroy your opponents space station before they destroy yours. Other game modes will also be added, including king of the hill where you try and control the resources on the map as well as last man standing in which you find yourself alone in space and must defeat all threats so you can escape unharmed.
+As a freelance space pilot you know of all the threats that can be lurking behind every asteroid and planet, however you never could have expected what was ahead of you as the galaxy seems to implode and brings some of the most ferocious pilots together for one final face off. Your survival will be dependent completely on your skills as a pilot. Good luck.
 
 # Summary
 
