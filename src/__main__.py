@@ -228,7 +228,7 @@ class Program:
         self.screen.fill(globals.BLACK)
         sprites = pygame.sprite.Group()
         if not self.server:
-        self.viewport.updateMidPoint(self.player.pos)
+            self.viewport.updateMidPoint(self.player.pos)
         for idx, ship in enumerate(self.ships):
             ship.render(self.viewport)
             path = Spline(ship,self.planets)
