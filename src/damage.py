@@ -18,7 +18,6 @@ class Damage():
         if mag < (thing.radius + planet.radius):
             Damage.calculateThingPlanetDamage(thing,planet)
 
-
     #
     #        1--->
     #     ^ / 
