@@ -20,6 +20,7 @@ class Ship(Thing):
 
     def update(self):
         firing = False
+        self.rvel = self.rvel*0.985
         b = []
         keys=pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
