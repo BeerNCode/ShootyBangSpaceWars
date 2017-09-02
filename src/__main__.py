@@ -31,7 +31,7 @@ class Program:
 
     SCREEN_WIDTH = 1024
     SCREEN_HEIGHT = 768
-    GAME_SPEED = 1
+    GAME_SPEED = 30
     HOST = "localhost"
     PORT = 15007
 
@@ -111,9 +111,8 @@ class Program:
             conn, addr = self.socket.accept()
             self.clients.append(Client(conn, addr))
             print("Just had a connection from [",addr,"]")
-            # sending the map
-
-            conn.send()
+            data = packets.Map.toJSON(packets.Map.toPacket(self.planets))
+            conn.send(data)
 
     def updateClients(self):
         """ Send packets to the clients """

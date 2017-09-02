@@ -7,6 +7,13 @@ class Map():
     def __init__(self, planets):
         self.planets = planets
 
+    @staticmethod
+    def toPacket(planets):
+        packagePlanets = []
+        for planet in planets:
+            packagePlanets.append(Planet.toPacket(planet))
+        return Map(packagePlanets)
+
     def toJSON(self):
         return json.JSONEncoder().encode(self)
 
