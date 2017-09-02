@@ -44,6 +44,11 @@ Ideas:
 - Tab - Open up scoreboard
 - Esc - Open menu
 
+(optional)
+- 1-9 - Special equipment usage
+- r - increase energy on HUD
+- f - decrease energy on HUD
+
 menu controls
 - up - move up selection
 - down - move down selection
@@ -71,6 +76,12 @@ menu controls
   - level 3 - medium
   - level 4 - medium / fast
   - level 5 - fast
+- HUD??
+  - level 1 - shows energy usage, shows equipment and shows radar
+  - level 2 - shows hull damage, shows equipment energy usage, (what points are being used where)
+  - level 3 - unlock showing allies on radar and planets
+  - level 4 - radar shows enemies and asteroids
+  - level 5 - shows gravitational pull and special equipment on screen
   
   # Sound files
   Advised that it'll be finished by 2pm. 
@@ -81,11 +92,30 @@ menu controls
   - crash
   - background music
 
+# HUD
+
+- Scoreboard
+- Radar
+  - enemies (red dots)
+  - team mates (green dots)
+  - asteroids & planets
+- Hull
+- Energy
+- Equipment
+  - icons of thrusters, shield, weapons, HUD.
+  - 5 points underneath to show how many energy points are in each equipment
+- Special Equipment?? - collect metal from killing enemies and mining, take it back to your spacestation and build it. If you die you drop all metal.
+  - Cloak - Hides from radar
+  - Mines - Drop and leave on map
+  - Rockets - Avoids Shields
+  - Nitro - Gives an extra boost on thrusters in a forward direction
+  - repair bots - repairs damage over time.
+- gravitational pull
 
 
-  #Dev
+# Dev
 
-  ## Packet format
+## Packet format
 
 - Map
 	- Planets[]
@@ -116,4 +146,3 @@ menu controls
 	- left (bool)
 	- forward (bool)
 	- shoot (bool)
-
