@@ -41,3 +41,26 @@ Ideas:
 - Spacebar - Shoot
 
 - Esc - Open menu
+
+# Energy
+- 5 points of energy
+- level 1 - 5 - energy goes from level 1 to 5 for each level
+
+- weapons
+  - level 1 - single shot
+  - level 2 - multi shot
+  - level 3 - triple shot
+  - level 4 - quad shot
+  - level 5 - burst shot
+- shields
+  - level 1 - small front facing shield
+  - level 2 - large front facing shield
+  - level 3 - small side and front facing shield
+  - level 4 - small back, side and front facing shield
+  - level 5 - full shield
+- Thrusters
+  - level 1 - slow
+  - level 2 - slow / medium
+  - level 3 - medium
+  - level 4 - medium / fast
+  - level 5 - fast
