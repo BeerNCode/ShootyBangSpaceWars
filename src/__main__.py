@@ -45,8 +45,8 @@ class Program():
         self.map_limits = Limits(Vector(0, 0), Vector(5000, 5000))
         self.running = True
         
-        if server:
-            for i in range(0,3):
+        if self.server:
+            for iq in range(0,3):
                 self.planets.append(Planet(20, 400, Vector(random.random()*SCREEN_WIDTH, random.random()*SCREEN_HEIGHT)))
         else:
             self.player = Ship()
