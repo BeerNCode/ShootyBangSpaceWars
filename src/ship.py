@@ -121,15 +121,6 @@ class Ship(Thing):
             self.energy -= energyCost
         else:
             self.set_sprite("base")
-                
-                
-        
-
-        
-        
-        
-        
-        
         
         super().update()
         return b

@@ -3,6 +3,9 @@ import time
 import math
 import random
 import sys
+import socket
+from client import Client
+from threading import Thread
 from ship import Ship
 from planet import Planet
 from vector import Vector
@@ -11,32 +14,33 @@ from damage import Damage
 from slug import Slug
 from limits import Limits
 
-SCREEN_WIDTH = 1024
-SCREEN_HEIGHT = 768
-
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
-GREEN = (0, 255, 0)
-RED = (255, 0, 0)
-
 pygame.init()
 
-FONTS = {}
-FONTS["title"] = pygame.font.SysFont('Calibri', 25, True, False)
-font = pygame.font.SysFont('Calibri', 25, True, False) # This will be deprecated and replaced with a dictionary of fonts for the theme
+class Colours:
+    BLACK = (0, 0, 0)
+    WHITE = (255, 255, 255)
+    GREEN = (0, 255, 0)
+    RED = (255, 0, 0)
 
-clock = pygame.time.Clock()
-pygame.display.set_caption("Shooty Bang Space Wars")
-size = (SCREEN_WIDTH, SCREEN_HEIGHT)
-screen = pygame.display.set_mode(size, pygame.RESIZABLE)
+class Fonts:
+    pygame.font.init()
+    TITLE = pygame.font.SysFont('Calibri', 25, True, False)
 
-class Program():
+class Program:
+
+    SCREEN_WIDTH = 1024
+    SCREEN_HEIGHT = 768
+
+    pygame.display.set_caption("Shooty Bang Space Wars")
 
     def __init__(self, server):
         if server:
             print("Running in SERVER mode")
         else:
             print("Running in CLIENT mode")
+        self.clock = pygame.time.Clock()
+        size = (Program.SCREEN_WIDTH, Program.SCREEN_HEIGHT)
+        self.screen = pygame.display.set_mode(size, pygame.RESIZABLE)
         self.server = server
         self.ships = []
         self.slugs = []
@@ -46,57 +50,92 @@ class Program():
         self.running = True
         
         if self.server:
-            for iq in range(0,3):
-                self.planets.append(Planet(20, 400, Vector(random.random()*SCREEN_WIDTH, random.random()*SCREEN_HEIGHT)))
+            self.loadMap()
+            self.clients = []
+            self.newClientsThread = Thread(target=self.listenForNewClients)
+            self.newClientsThread.start()
         else:
+            self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.listenThread = Thread(target=self.listenToServer)
+            self.listenThread.start()
             self.player = Ship()
             self.ships.append(self.player)
+            # Need to get the map from the server
+    def loadMap(self):
             for iq in range(0,3):
-                self.planets.append(Planet(random.random()*100+50, 400, Vector(random.random()*SCREEN_WIDTH, random.random()*SCREEN_HEIGHT)))
+                self.planets.append(Planet(random.random()*100+50, 400, Vector(random.random()*Program.SCREEN_WIDTH, random.random()*Program.SCREEN_HEIGHT)))
 
     def run(self):
         while self.running:
-            print("Loop: "+str(self.frames))
+
+            print("Step: "+str(self.frames))
             self.updateEvents()    
+            if not self.running:
+                break
             self.updateShips()
             self.updateSlugs()
             self.render()
             
             if not self.server:
-                screen.blit(font.render(str(self.frames), True, WHITE), [SCREEN_WIDTH-100, 10])
-                screen.blit(font.render(str(self.player.damage), True, WHITE), [SCREEN_WIDTH-100, 20])
+                self.screen.blit(Fonts.TITLE.render(str(self.frames), True, Colours.WHITE), [Program.SCREEN_WIDTH-100, 10])
+                self.screen.blit(Fonts.TITLE.render(str(self.player.damage), True, Colours.WHITE), [Program.SCREEN_WIDTH-100, 20])
 
             pygame.display.flip()
             self.frames+=1
-            clock.tick(30)
+            self.clock.tick(30)
         pygame.quit()
+
+    def listenToServer(self):
+        """ Listens to the server for updates to the world """
+        while True:
+            data = self.sock.recv()
+            print('Received:', str(repr(data)))
+            # Update the model with other
+            # add new ships
+            # update positions
+            # 
+
+    def listenForNewClients(self):
+        while True:
+            conn, addr = self.socket.accept()
+            clients.append(Client(conn, addr))
+            print("Connection from [",addr,"]")
+            while True:
+                data = conn.recv(1024)
+                if not data: 
+                    break
+
+    def updateClients(self):
+        """ Send packets to the clients """
+        # for client in self.clients:
+
 
     def updateEvents(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 print("Quitting the game")
                 self.running = False
-                screen.fill(WHITE)
+                self.screen.fill(Colours.WHITE)
             if event.type == pygame.VIDEORESIZE:
-                screen = pygame.display.set_mode((event.w, event.h),
+                self.screen = pygame.display.set_mode((event.w, event.h),
                                                   pygame.RESIZABLE) 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     done = True
-                    screen.fill(WHITE)
+                    self.screen.fill(Colours.WHITE)
 
     def render(self):
-        screen.fill(BLACK)
+        self.screen.fill(Colours.BLACK)
         sprites = pygame.sprite.Group()
         for ship in self.ships:
-            ship.show(screen)
+            ship.show(self.screen)
             sprites.add(ship)
         for slug in self.slugs:
             sprites.add(slug)
         for planet in self.planets:
             planet.update()
             sprites.add(planet)
-        sprites.draw(screen)
+        sprites.draw(self.screen)
 
     def updateShips(self):
         for ship in self.ships:
