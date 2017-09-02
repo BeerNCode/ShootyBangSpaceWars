@@ -6,6 +6,7 @@ from ship import Ship
 from planet import Planet
 from vector import Vector
 from time import sleep
+from damage import Damage
 from slug import Slug
 
 SCREEN_WIDTH = 800
@@ -54,6 +55,8 @@ while not done:
     sprites = pygame.sprite.Group()
     for ship in ships:
         ship.update_gravity(planets)
+        for planet in planets:
+            Damage.determineThingPlanetDamage(ship,planet)
         ship.update()
         newSlugs = ship.update()
         for slug in newSlugs:
