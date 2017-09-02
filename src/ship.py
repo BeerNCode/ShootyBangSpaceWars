@@ -45,8 +45,13 @@ class Ship(Thing):
         else:
             self.set_sprite("base")
         if keys[pygame.K_SPACE]:
-            b.append(Slug(self.pos,self.vel.add(Vector.fromAngle(self.rpos).mult(2)), self.rpos))
+            if (self.energy > 5):
+                b.append(Slug(self.pos,self.vel.add(Vector.fromAngle(self.rpos).mult(2)), self.rpos))
+                self.energy -= 5
             firing = True
+        if (self.energy < 100):
+            self.energy += 0.5
+
 
         super().update()
         return b
