@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import pygame
 import time
 import math
@@ -320,6 +319,10 @@ class Program:
         self.viewport.updateMidPoint(self.player.pos)
         for idx, ship in enumerate(self.ships):
             ship.render(self.viewport)
+            path = Spline(ship,self.planets)
+            splinePoints = path.get_prediction(60)
+            for Vector in splinePoints:
+                pygame.draw.rect(self.screen, Colours.WHITE, [Vector.x, Vector.y, 1, 1], 0)
             ship.showStatus(self.screen, idx)
             sprites.add(ship)
         for slug in self.slugs:
@@ -361,5 +364,4 @@ if __name__ == "__main__":
     else:
         server = False
     p = Program(server)
->>>>>>> c0c0cbe74719ce625c0620841e12b28574645f45
     p.run()
