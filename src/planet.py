@@ -44,6 +44,12 @@ class Planet(pygame.sprite.Sprite):
         sp.set_colorkey(background)
         self.sprites[id] = sp
 
+    def render(self, viewport):
+        self.image = self.original_image
+        self.rect = self.image.get_rect()
+        self.rect.x = (self.pos.x-self.rect.width/2) - viewport.getMidPoint().x + viewport.width/2
+        self.rect.y = (self.pos.y-self.rect.height/2) - viewport.getMidPoint().y + viewport.height/2
+
     def set_sprite(self, id):
         self.original_image = self.sprites[id]
 
