@@ -7,6 +7,7 @@ import socket
 from client import Client
 from threading import Thread
 from ship import Ship
+from spline import Spline
 from planet import Planet
 from lightSource import LightSource
 from vector import Vector
@@ -31,7 +32,7 @@ class Program:
 
     SCREEN_WIDTH = 1024
     SCREEN_HEIGHT = 768
-    GAME_SPEED = 1
+    GAME_SPEED = 30
     HOST = "localhost"
     PORT = 15007
 
@@ -61,8 +62,8 @@ class Program:
             self.newClientsThread = Thread(target=self.listenForNewClients)
             self.newClientsThread.start()
         else:
-            self.listenThread = Thread(target=self.listenToServer)
-            self.listenThread.start()
+            #self.listenThread = Thread(target=self.listenToServer)
+            #self.listenThread.start()
             self.player = Ship()
             self.ships.append(self.player)
             for iq in range(0,3):
@@ -138,6 +139,10 @@ class Program:
         for ship in self.ships:
             ship.show(self.screen)
             sprites.add(ship)
+            path = Spline(ship,self.planets)
+            splinePoints = path.get_prediction(60)
+            for Vector in splinePoints:
+                pygame.draw.rect(self.screen, Colours.WHITE, [Vector.x, Vector.y, 1, 1], 0)
         for slug in self.slugs:
             sprites.add(slug)
         for planet in self.planets:
@@ -149,10 +154,6 @@ class Program:
         for ship in self.ships:
             ship.update_gravity(self.planets)
             ship.update_regen(self.lightSources)
-            path = Spline(ship,planets)
-            splinePoints = path.get_prediction(10)
-            for Vector in splinePoints:
-                surface.set_at((Vector.x,Vector.Y), color)
             for planet in self.planets:
                 Damage.determineThingPlanetDamage(ship, planet)
             newSlugs = ship.update()
