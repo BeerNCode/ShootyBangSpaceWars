@@ -10,6 +10,12 @@ from client import Client
 from threading import Thread
 from ship import Ship
 from planet import Planet
+from client import Client
+from threading import Thread
+from ship import Ship
+from spline import Spline
+from planet import Planet
+from lightSource import LightSource
 from vector import Vector
 from time import sleep
 from damage import Damage
@@ -23,16 +29,18 @@ import globals
 
 pygame.init()
 
-
 class Program:
 
     SCREEN_WIDTH = 1024
     SCREEN_HEIGHT = 768
     GAME_SPEED = 30
-    HOST = "localhost" # 192.168.1.175
+    HOST = "localhost"
     PORT = 15007
 
     pygame.display.set_caption("Shooty Bang Space Wars")
+
+    screenSize = (SCREEN_WIDTH, SCREEN_HEIGHT)
+    screen = pygame.display.set_mode(screenSize, pygame.RESIZABLE)
 
     def __init__(self, server):
         if server:
@@ -46,17 +54,18 @@ class Program:
         self.ships = []
         self.slugs = []
         self.planets = []
-        self.frames = 0
-        self.map_limits = Limits(Vector(0, 0), Vector(5000, 5000))
-        self.running = True
-        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.viewport = Viewport(Vector(self.SCREEN_WIDTH/2, self.SCREEN_HEIGHT/2), self.SCREEN_WIDTH, self.SCREEN_HEIGHT)
         self.lightSources = []
-
+        self.map_limits = Limits(Vector(0, 0), Vector(globals.MAP_WIDTH, globals.MAP_HEIGHT))
+        self.frames = 0
+        self.running = True
+        self.viewport = Viewport(Vector(self.SCREEN_WIDTH/2, self.SCREEN_HEIGHT/2), self.SCREEN_WIDTH, self.SCREEN_HEIGHT)
         globals.MAP_WIDTH = self.SCREEN_WIDTH
         globals.MAP_HEIGHT = self.SCREEN_HEIGHT
+        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         
         if self.server:
+            for iq in range(0,3):
+                self.planets.append(Planet(20, 400, Vector(random.random()*globals.MAP_WIDTH, random.random()*globals.MAP_HEIGHT)))
             self.loadMap()
             self.clients = []
             self.newClientsThread = Thread(target=self.listenForNewClients)
@@ -137,6 +146,7 @@ class Program:
     def listenForNewClients(self):
         self.socket.bind((Program.HOST, Program.PORT))
         self.socket.listen(5)
+
         while self.running:
             conn, addr = self.socket.accept()
             ship = Ship()
@@ -216,11 +226,17 @@ class Program:
                     self.screen.fill(Colours.WHITE)
 
     def render(self):
-        self.screen.fill(Colours.BLACK)
+        self.screen.fill(globals.BLACK)
         sprites = pygame.sprite.Group()
-        self.viewport.updateMidPoint(self.player.pos)
-        for ship in self.ships:
+        if not self.server:
+            self.viewport.updateMidPoint(self.player.pos)
+        for idx, ship in enumerate(self.ships):
             ship.render(self.viewport)
+            path = Spline(ship,self.planets)
+            splinePoints = path.get_prediction(30)
+            for RenderablePoint in splinePoints:
+                RenderablePoint.render(self.viewport)
+                sprites.add(RenderablePoint)
             ship.showStatus(self.screen, idx)
             sprites.add(ship)
         for slug in self.slugs:

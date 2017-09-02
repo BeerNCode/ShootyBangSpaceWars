@@ -1,5 +1,6 @@
 from vector import Vector 
 from thing import Thing
+from renderablePoint import RenderablePoint
 
 class Spline(Thing):
     """ Reticulatable splines!"""
@@ -26,7 +27,7 @@ class Spline(Thing):
                 acc = acc.add(separation.normalise().mult(8/(m*m)).mult(thing.mass))
             tempVel = tempVel.add(acc)
             tempPos = tempPos.add(tempVel.mult(8))
-            splinePoints.append(tempPos)
+            splinePoints.append(RenderablePoint(tempPos))
             count += 1
             
         return splinePoints
