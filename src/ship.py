@@ -5,11 +5,13 @@ import math
 import pygame
 
 WHITE = (255, 255, 255)
-ENERGY_COLOUR = (100, 100, 0)
-HEALTH_COLOUR = (70, 255, 50)
+ENERGY_COLOUR = (100, 0, 100)
+HEALTH_COLOUR = (70, 255, 150)
 
+SLUG_SPEED = 20
 SLUG_ENERGY = 5
 THRUST_ENERGY = 1
+THRUST = 10
 RVEL_DECAY = 0.975
 TURN_ACC = 0.002
 ENERGY_REGEN = 0.5
@@ -20,6 +22,7 @@ class Ship(Thing):
     def __init__(self):
         """ Construcz """
         Thing.__init__(self)
+        self.id = "Dave"
         self.sprites = {}
         self.add_sprite("base", "../img/BaseSpaceship.png", WHITE)
         self.add_sprite("thrust", "../img/BaseSpaceshipForward.png", WHITE)
@@ -67,7 +70,7 @@ class Ship(Thing):
             boosting = True
         if keys[pygame.K_SPACE]:
             if (self.energy >= SLUG_ENERGY):
-                b.append(Slug(self.pos,self.vel.add(Vector.fromAngle(self.rpos).mult(2)), self.rpos))
+                b.append(Slug(self.pos,self.vel.add(Vector.fromAngle(self.rpos).mult(SLUG_SPEED)), self.rpos))
                 self.energy -= SLUG_ENERGY
             firing = True
         if (self.energy < 100):
@@ -128,10 +131,9 @@ class Ship(Thing):
         bar_width = 32
         bar_height = 5
         bar_margin = 1
+        font = pygame.font.SysFont('Calibri', 12, True, False)
+        screen.blit(font.render(self.id, True, WHITE), [self.pos.x-self.radius, self.pos.y-self.radius-15])
         if self.energy > 0:
             pygame.draw.rect(screen, ENERGY_COLOUR, [self.pos.x-self.radius, self.pos.y+self.radius, self.energy*32/100, bar_height], 0)
         if self.hull > 0:
             pygame.draw.rect(screen, HEALTH_COLOUR, [self.pos.x-self.radius, self.pos.y+self.radius+bar_height+bar_margin, self.hull*32/100, bar_height], 0)
-
-
-

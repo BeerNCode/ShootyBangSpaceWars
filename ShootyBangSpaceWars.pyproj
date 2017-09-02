@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{a9462575-60c2-42dd-bff6-e7d81db1b5bf}</ProjectGuid>
+    <ProjectHome />
+    <StartupFile>src\__main__.py</StartupFile>
+    <SearchPath>
+    </SearchPath>
+    <WorkingDirectory>src</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <ProjectTypeGuids>{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <InterpreterId />
+    <IsWindowsApplication>False</IsWindowsApplication>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
+  <PropertyGroup>
+    <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="img\backdrop.png">
+      <Publish>True</Publish>
+    </Content>
+    <Content Include="img\BaseSpaceship.png">
+      <Publish>True</Publish>
+    </Content>
+    <Content Include="img\BaseSpaceshipForward.png">
+      <Publish>True</Publish>
+    </Content>
+    <Content Include="img\BaseSpaceshipForwardLeft.png">
+      <Publish>True</Publish>
+    </Content>
+    <Content Include="img\BaseSpaceshipForwardRight.png">
+      <Publish>True</Publish>
+    </Content>
+    <Content Include="img\BaseSpaceshipFullBurn.png">
+      <Publish>True</Publish>
+    </Content>
+    <Content Include="img\BaseSpaceshipHalfBurn.png">
+      <Publish>True</Publish>
+    </Content>
+    <Content Include="img\BaseSpaceshipLeft.png">
+      <Publish>True</Publish>
+    </Content>
+    <Content Include="img\BaseSpaceshipRight.png">
+      <Publish>True</Publish>
+    </Content>
+    <Content Include="img\explosion.png">
+      <Publish>True</Publish>
+    </Content>
+    <Content Include="img\LaserShot.png">
+      <Publish>True</Publish>
+    </Content>
+    <Content Include="img\planets.png">
+      <Publish>True</Publish>
+    </Content>
+    <Content Include="img\planets_transparent.png">
+      <Publish>True</Publish>
+    </Content>
+    <Content Include="img\ShieldFullHealth.png">
+      <Publish>True</Publish>
+    </Content>
+    <Content Include="img\ShieldHalfHealth.png">
+      <Publish>True</Publish>
+    </Content>
+    <Content Include="img\ShieldLowHealth.png">
+      <Publish>True</Publish>
+    </Content>
+    <Content Include="img\ships_asteroids_0.png">
+      <Publish>True</Publish>
+    </Content>
+    <Content Include="img\Thruster.png">
+      <Publish>True</Publish>
+    </Content>
+    <Content Include="img\Turret Blast.png">
+      <Publish>True</Publish>
+    </Content>
+    <Content Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="src\damage.py" />
+    <Compile Include="src\limits.py" />
+    <Compile Include="src\map.py" />
+    <Compile Include="src\planet.py" />
+    <Compile Include="src\ship.py" />
+    <Compile Include="src\slug.py" />
+    <Compile Include="src\thing.py" />
+    <Compile Include="src\vector.py" />
+    <Compile Include="src\__init__.py" />
+    <Compile Include="src\__main__.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="img" />
+    <Folder Include="src" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
+</Project>
