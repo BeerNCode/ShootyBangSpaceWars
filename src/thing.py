@@ -1,6 +1,7 @@
 import pygame
 from vector import Vector 
 import math
+import globals
 
 class Thing(pygame.sprite.Sprite):
     """A thing with mass and physical properties"""
@@ -23,12 +24,12 @@ class Thing(pygame.sprite.Sprite):
         self.rpos += self.rvel
 
         if self.pos.x < 0:
-            self.pos.x = 1024 # get from somewhere
-        if self.pos.x > 1024:
+            self.pos.x = globals.MAP_WIDTH # get from somewhere
+        if self.pos.x > globals.MAP_WIDTH:
             self.pos.x = 0
         if self.pos.y < 0:
-            self.pos.y = 578
-        if self.pos.y > 578:
+            self.pos.y = globals.MAP_HEIGHT
+        if self.pos.y > globals.MAP_HEIGHT:
             self.pos.y = 0
         
         if self.rpos < 0:
@@ -36,10 +37,11 @@ class Thing(pygame.sprite.Sprite):
         if self.rpos > 2*math.pi:
             self.rpos = 0
 
+    def render(self, viewport):
         self.image = pygame.transform.rotate(self.original_image, -self.rpos * 180 / math.pi)
         self.rect = self.image.get_rect()
-        self.rect.x = self.pos.x-self.rect.width/2
-        self.rect.y = self.pos.y-self.rect.height/2
+        self.rect.x = (self.pos.x-self.rect.width/2) - viewport.getMidPoint().x + viewport.width/2
+        self.rect.y = (self.pos.y-self.rect.height/2) - viewport.getMidPoint().y + viewport.height/2
 
     def update_gravity(self, masses):
         acc = Vector(0,0)

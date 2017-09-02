@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{a9462575-60c2-42dd-bff6-e7d81db1b5bf}</ProjectGuid>
     <ProjectHome />
-    <StartupFile>src\__main__.py</StartupFile>
+    <StartupFile>src\shootybangspacewars.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>src</WorkingDirectory>
@@ -54,6 +54,7 @@
     <Content Include="img\LaserShot.png">
       <Publish>True</Publish>
     </Content>
+    <Content Include="img\MenuBackdropWithButtons.png" />
     <Content Include="img\planets.png">
       <Publish>True</Publish>
     </Content>
@@ -82,8 +83,15 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="README.md" />
+    <Content Include="snd\Adjust.wav" />
+    <Content Include="snd\In Flight.wav" />
+    <Content Include="snd\Laser 9.wav" />
+    <Content Include="snd\Take Off.wav" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\globals.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="src\damage.py" />
     <Compile Include="src\limits.py" />
     <Compile Include="src\map.py" />
@@ -92,15 +100,25 @@
     </Compile>
     <Compile Include="src\planet.py" />
     <Compile Include="src\ship.py" />
+    <Compile Include="src\shootybangspacewars.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="src\slug.py" />
+    <Compile Include="src\sounds.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="src\thing.py" />
     <Compile Include="src\vector.py" />
+    <Compile Include="src\viewport.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="src\__init__.py" />
     <Compile Include="src\__main__.py" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="img" />
     <Folder Include="maps\" />
+    <Folder Include="snd\" />
     <Folder Include="src" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />

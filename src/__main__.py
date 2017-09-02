@@ -16,18 +16,13 @@ from damage import Damage
 from slug import Slug
 from limits import Limits
 import packets
+from spline import Spline
+from lightSource import LightSource
+from viewport import Viewport
+import globals
 
 pygame.init()
 
-class Colours:
-    BLACK = (0, 0, 0)
-    WHITE = (255, 255, 255)
-    GREEN = (0, 255, 0)
-    RED = (255, 0, 0)
-
-class Fonts:
-    pygame.font.init()
-    TITLE = pygame.font.SysFont('Calibri', 25, True, False)
 
 class Program:
 
@@ -55,6 +50,11 @@ class Program:
         self.map_limits = Limits(Vector(0, 0), Vector(5000, 5000))
         self.running = True
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.viewport = Viewport(Vector(self.SCREEN_WIDTH/2, self.SCREEN_HEIGHT/2), self.SCREEN_WIDTH, self.SCREEN_HEIGHT)
+        self.lightSources = []
+
+        globals.MAP_WIDTH = self.SCREEN_WIDTH
+        globals.MAP_HEIGHT = self.SCREEN_HEIGHT
         
         if self.server:
             self.loadMap()
@@ -66,10 +66,12 @@ class Program:
             self.listenThread.start()
             self.player = Ship()
             self.ships.append(self.player)
+            self.lightSources.append(LightSource(Vector(300,300),1000))
 
     def loadMap(self):
             for iq in range(0,3):
                 self.planets.append(Planet(random.random()*100+50, 400, Vector(random.random()*Program.SCREEN_WIDTH, random.random()*Program.SCREEN_HEIGHT)))
+            self.lightSources.append(LightSource(Vector(100,100),1))
 
     def run(self):
         while self.running:
@@ -92,9 +94,9 @@ class Program:
 
                 self.render()
 
-                # if not self.server:
-                #     self.screen.blit(Fonts.TITLE.render(str(self.frames), True, Colours.WHITE), [Program.SCREEN_WIDTH-100, 10])
-                #     self.screen.blit(Fonts.TITLE.render(str(self.player.damage), True, Colours.WHITE), [Program.SCREEN_WIDTH-100, 20])
+                if not self.server:
+                    self.screen.blit(globals.Fonts.TITLE.render(str(self.frames), True, Colours.WHITE), [Program.SCREEN_WIDTH-100, 10])
+                    self.screen.blit(globals.Fonts.TITLE.render(str(self.player.damage), True, Colours.WHITE), [Program.SCREEN_WIDTH-100, 20])
 
                 pygame.display.flip()
             except Exception:
@@ -216,13 +218,16 @@ class Program:
     def render(self):
         self.screen.fill(Colours.BLACK)
         sprites = pygame.sprite.Group()
+        self.viewport.updateMidPoint(self.player.pos)
         for ship in self.ships:
-            ship.show(self.screen)
+            ship.render(self.viewport)
+            ship.showStatus(self.screen, idx)
             sprites.add(ship)
         for slug in self.slugs:
+            slug.render(self.viewport)
             sprites.add(slug)
         for planet in self.planets:
-            planet.update()
+            planet.render(self.viewport)
             sprites.add(planet)
         sprites.draw(self.screen)
 
@@ -231,6 +236,7 @@ class Program:
             ship = client.ship
             ship.setInputs(client.keys)
             ship.update_gravity(self.planets)
+            ship.update_regen(self.lightSources)
             for planet in self.planets:
                 Damage.determineThingPlanetDamage(ship, planet)
             newSlugs = ship.update()

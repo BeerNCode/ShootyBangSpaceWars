@@ -1,9 +1,11 @@
 from vector import Vector 
 from thing import Thing
 from slug import Slug
+from sounds import Sounds, Sound
 import math
 import pygame
 import packets
+import globals
 
 WHITE = (255, 255, 255)
 ENERGY_COLOUR = (100, 0, 100)
@@ -14,8 +16,9 @@ SLUG_ENERGY = 5
 THRUST_ENERGY_FACTOR = 0.04
 THRUST = 10
 RVEL_DECAY = 0.975
-TURN_ACC = 0.002
+TURN_ACC = 0.005
 ENERGY_REGEN = 0.5
+ENERGYCAP = 100
 
 class Ship(Thing):
     """ Ship It """
@@ -23,7 +26,6 @@ class Ship(Thing):
     def __init__(self):
         """ Construcz """
         Thing.__init__(self)
-        self.id = "Dave"
         self.sprites = {}
         self.add_sprite("base", "../img/BaseSpaceship.png", WHITE)
         self.add_sprite("thrust", "../img/BaseSpaceshipForward.png", WHITE)
@@ -97,8 +99,9 @@ class Ship(Thing):
             if (self.energy >= SLUG_ENERGY):
                 newSlugs.append(Slug(self.pos,self.vel.add(Vector.fromAngle(self.rpos).mult(SLUG_SPEED)), self.rpos))
                 self.energy -= SLUG_ENERGY
+                globals.sounds.play(Sound.Fire)
             firing = True
-        if (self.energy < 100):
+        if (self.energy < ENERGYCAP):
             self.energy += ENERGY_REGEN
         self.hull = max(0, 100-self.damage)
         
@@ -106,10 +109,13 @@ class Ship(Thing):
             self.portTurn = False
             self.starboardTurn = False
             if self.boosting:
-                fullBurn = True
+                self.fullBurn = True
         else:
-            fullBurn = False
+            self.fullBurn = False
             
+        if (self.fullBurn or self.thrusting or self.boosting or self.portTurn or self.starboardTurn):
+            globals.sounds.play(Sound.Thrust)
+
         thrust = Vector(0,0)
         if self.fullBurn:
             thrust = Vector.fromAngle(self.rpos).mult(30)
@@ -149,6 +155,7 @@ class Ship(Thing):
                 self.set_sprite("thrustClockwise")
             else:
                 self.set_sprite("thrust")
+                globals.sounds.stop(Sound.Thrust)
         else:
             if self.portTurn:
                 self.set_sprite("AClockwise")
@@ -156,13 +163,26 @@ class Ship(Thing):
                 self.set_sprite("Clockwise")
             else:
                 self.set_sprite("base")
-
+        font = pygame.font.SysFont('Calibri', 12, True, False)
+        screen.blit(font.render(globals.uname, True, WHITE), [bar_step, 10])
         bar_width = 32
         bar_height = 5
         bar_margin = 1
-        font = pygame.font.SysFont('Calibri', 12, True, False)
-        screen.blit(font.render(self.id, True, WHITE), [self.pos.x-self.radius, self.pos.y-self.radius-15])
         if self.energy > 0:
-            pygame.draw.rect(screen, ENERGY_COLOUR, [self.pos.x-self.radius, self.pos.y+self.radius, self.energy*32/100, bar_height], 0)
+            pygame.draw.rect(screen, ENERGY_COLOUR, [bar_step, text_fudge_height + bar_margin, self.energy*bar_width/100, bar_height], 0)
         if self.hull > 0:
-            pygame.draw.rect(screen, HEALTH_COLOUR, [self.pos.x-self.radius, self.pos.y+self.radius+bar_height+bar_margin, self.hull*32/100, bar_height], 0)
+            pygame.draw.rect(screen, HEALTH_COLOUR, [bar_step, text_fudge_height + 2 * bar_margin + bar_height, self.hull*bar_width/100, bar_height], 0)
+    
+    def update_regen(self, lightSources):
+        if (self.energy <= ENERGYCAP*2):
+            for LightSource in lightSources:
+                print("called")
+                self.energy = self.energy + LightSource.get_energy(self.pos)
+                print("charging",LightSource.get_energy(self.pos))
+
+    def showStatus(self, screen, index):
+        bar_width = 75
+        bar_height = 8
+        bar_margin = 5
+        bar_step = 40 * index + 8
+        text_fudge_height = 20;
