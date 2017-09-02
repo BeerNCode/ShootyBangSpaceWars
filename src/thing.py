@@ -21,6 +21,16 @@ class Thing(pygame.sprite.Sprite):
         """updated the physics of the thing"""
         self.pos = self.pos.add(self.vel)
         self.rpos += self.rvel
+
+        if self.pos.x < 0:
+            self.pos.x = 1024 # get from somewhere
+        if self.pos.x > 1024:
+            self.pos.x = 0
+        if self.pos.y < 0:
+            self.pos.y = 578
+        if self.pos.y > 578:
+            self.pos.y = 0
+        
         if self.rpos < 0:
             self.rpos = 2*math.pi
         if self.rpos > 2*math.pi:
