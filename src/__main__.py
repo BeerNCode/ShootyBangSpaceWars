@@ -68,12 +68,12 @@ class Program:
             self.player = Ship()
             self.ships.append(self.player)
             for iq in range(0,3):
-                self.planets.append(Planet(random.random()*100+50, 400, Vector(random.random()*Program.SCREEN_WIDTH, random.random()*Program.SCREEN_HEIGHT)))
+                self.planets.append(Planet(random.random()*100+50, 400, Vector(random.random()*globals.MAP_WIDTH, random.random()*globals.MAP_HEIGHT)))
             self.lightSources.append(LightSource(Vector(300,300),1000))
             # Need to get the map from the server
     def loadMap(self):
             for iq in range(0,3):
-                self.planets.append(Planet(random.random()*100+50, 400, Vector(random.random()*Program.SCREEN_WIDTH, random.random()*Program.SCREEN_HEIGHT)))
+                self.planets.append(Planet(random.random()*100+50, 400, Vector(random.random()*globals.MAP_WIDTH, random.random()*globals.MAP_HEIGHT)))
             self.lightSources.append(LightSource(Vector(100,100),1))
 
     def run(self):
