@@ -6,6 +6,7 @@ import random
 import sys
 import socket
 import traceback
+from sys import stdin
 from client import Client
 from threading import Thread
 from ship import Ship
@@ -111,7 +112,7 @@ class Program:
             except Exception:
                 exc_type, exc_value, exc_traceback = sys.exc_info()
                 traceback.print_exception(exc_type, exc_value, exc_traceback)
-                sys.exit()
+                stdin.readline()
             self.frames+=1
             self.clock.tick(Program.GAME_SPEED)
 
@@ -133,7 +134,7 @@ class Program:
                     jships = decoded_data["ships"]
                     newShips = []
                     for jship in jships:
-                        ship = next((s for s in self.ships if s.name == jship.name), None)
+                        ship = next((s for s in self.ships if s.name == jship["name"]), None)
                         if ship is None:
                             ship = Ship()# add info
                             self.ships.append(ship)
@@ -162,6 +163,7 @@ class Program:
                 data = Program.sendJSON(client.conn, data)
             except:
                 print("Ouch :/")
+                stdin.readline()
 
     def listenToClient(self, client):
         print("SERVER: Listneing to clint")
@@ -193,6 +195,7 @@ class Program:
             socket.send(lb+db)
         except:
             print("Failed connection")
+            stdin.readline()
 
     @staticmethod
     def readJSON(socket):
@@ -203,6 +206,7 @@ class Program:
             return data
         except:
             print("Failed connection")
+            stdin.readline()
 
     def sendServerUpdate(self):
         """ Send packets from client to server """

@@ -16,7 +16,7 @@ class Sounds():
 
     def __init__(self):
         pygame.mixer.init()
-        pygame.mixer.set_num_channels(10);
+        pygame.mixer.set_num_channels(10)
         for idx, sound in enumerate(Sound): 
             soundFile = pygame.mixer.Sound(".." + os.sep + "snd" + os.sep + sound.value)
             self._sound_library[sound.name] = soundFile
