@@ -14,7 +14,7 @@ THRUST_ENERGY = 1
 THRUST = 5
 RVEL_DECAY = 0.975
 TURN_ACC = 0.001
-ENERGY_REGEN = 0.2
+ENERGY_REGEN = 0.5
 
 class Ship(Thing):
     """ Ship It """

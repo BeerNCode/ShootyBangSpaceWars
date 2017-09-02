@@ -87,6 +87,7 @@ class Program():
         screen.fill(BLACK)
         sprites = pygame.sprite.Group()
         for ship in self.ships:
+            ship.show(screen)
             sprites.add(ship)
         for slug in self.slugs:
             sprites.add(slug)
