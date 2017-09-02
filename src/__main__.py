@@ -29,7 +29,7 @@ clock = pygame.time.Clock()
 done = False
 planets = []
 for i in range(0,3):
-    planets.append(Planet(20, 400, Vector(random.random()*SCREEN_WIDTH, random.random()*SCREEN_HEIGHT)))
+    planets.append(Planet(20, 100, Vector(random.random()*SCREEN_WIDTH, random.random()*SCREEN_HEIGHT)))
 
 ships = []
 slugs = []
