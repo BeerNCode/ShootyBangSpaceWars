@@ -46,15 +46,26 @@ class Program():
         self.running = True
         
         if self.server:
-            for iq in range(0,3):
-                self.planets.append(Planet(20, 400, Vector(random.random()*SCREEN_WIDTH, random.random()*SCREEN_HEIGHT)))
+            self.loadMap()
+            self.clients = []
+            self.newClientsThread = Thread(target=listenForNewServer)
+            self.newClientsThread.start()
         else:
+            self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.listenThread = Thread(target=listenToServer)
+            self.listenThread.start()
             self.player = Ship()
             self.ships.append(self.player)
+            # Need to get the map from the server
+
+    def loadMap(self):
+        for iq in range(0,3):
+            self.planets.append(Planet(20, 400, Vector(random.random()*SCREEN_WIDTH, random.random()*SCREEN_HEIGHT)))
 
     def run(self):
         while self.running:
-            print("Loop: "+str(self.frames))
+
+            print("Step: "+str(self.frames))
             self.updateEvents()    
             self.updateShips()
             self.updateSlugs()
@@ -68,6 +79,31 @@ class Program():
             self.frames+=1
             clock.tick(30)
         pygame.quit()
+
+    def listenToServer(self):
+        """ Listens to the server for updates to the world """
+        while True:
+            data = self.sock.recv()
+            print('Received:', str(repr(data)))
+            # Update the model with other
+            # add new ships
+            # update positions
+            # 
+
+    def listenForNewClients(self):
+        while True:
+            conn, addr = s.accept()
+            clients.append(Client(conn, addr))
+            print("Connection from [",addr,"]")
+            while True:
+                data = conn.recv(1024)
+                if not data: 
+                    break
+
+    def updateClients(self):
+        """ Send packets to the clients """
+        for client in self.clients:
+
 
     def updateEvents(self):
         for event in pygame.event.get():
