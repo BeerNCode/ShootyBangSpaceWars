@@ -92,7 +92,7 @@ while not done:
         sprites.add(slug)
 
     for planet in planets:
-        planet.show(screen)
+        sprites.add(planet)
 
     sprites.draw(screen)
 
