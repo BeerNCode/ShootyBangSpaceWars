@@ -1,6 +1,6 @@
 ## ShootyBangSpaceWars
 
-When in space... you die.
+Idea of the game is to destroy your opponents space station before they destroy yours. Other game modes will also be added, including king of the hill where you try and control the resources on the map as well as last man standing in which you find yourself alone in space and must defeat all threats so you can escape unharmed.
 
 # Summary
 
