@@ -25,7 +25,6 @@ class Ship(Thing):
     def __init__(self):
         """ Construcz """
         Thing.__init__(self)
-        self.id = "Dave"
         self.sprites = {}
         self.add_sprite("base", "../img/BaseSpaceship.png", WHITE)
         self.add_sprite("thrust", "../img/BaseSpaceshipForward.png", WHITE)
@@ -146,7 +145,7 @@ class Ship(Thing):
         text_fudge_height = 20;
 
         font = pygame.font.SysFont('Calibri', 12, True, False)
-        screen.blit(font.render(self.id, True, WHITE), [bar_step, 10])
+        screen.blit(font.render(globals.uname, True, WHITE), [bar_step, 10])
         if self.energy > 0:
             pygame.draw.rect(screen, ENERGY_COLOUR, [bar_step, text_fudge_height + bar_margin, self.energy*bar_width/100, bar_height], 0)
         if self.hull > 0:
