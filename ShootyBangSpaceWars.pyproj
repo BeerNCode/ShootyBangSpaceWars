@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{a9462575-60c2-42dd-bff6-e7d81db1b5bf}</ProjectGuid>
     <ProjectHome />
-    <StartupFile>src\__main__.py</StartupFile>
+    <StartupFile>src\shootybangspacewars.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>src</WorkingDirectory>
@@ -54,6 +54,7 @@
     <Content Include="img\LaserShot.png">
       <Publish>True</Publish>
     </Content>
+    <Content Include="img\MenuBackdropWithButtons.png" />
     <Content Include="img\planets.png">
       <Publish>True</Publish>
     </Content>
@@ -99,6 +100,9 @@
     </Compile>
     <Compile Include="src\planet.py" />
     <Compile Include="src\ship.py" />
+    <Compile Include="src\shootybangspacewars.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="src\slug.py" />
     <Compile Include="src\sounds.py">
       <SubType>Code</SubType>

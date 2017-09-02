@@ -7,7 +7,6 @@ import socket
 from client import Client
 from threading import Thread
 from ship import Ship
-from spline import Spline
 from planet import Planet
 from lightSource import LightSource
 from vector import Vector
@@ -137,10 +136,6 @@ class Program:
         self.viewport.updateMidPoint(self.player.pos)
         for idx, ship in enumerate(self.ships):
             ship.render(self.viewport)
-            path = Spline(ship,self.planets)
-            splinePoints = path.get_prediction(60)
-            for Vector in splinePoints:
-                pygame.draw.rect(self.screen, globals.WHITE, [Vector.x, Vector.y, 1, 1], 0)
             ship.showStatus(self.screen, idx)
             sprites.add(ship)
         for slug in self.slugs:
