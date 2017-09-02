@@ -13,6 +13,7 @@ from time import sleep
 from damage import Damage
 from slug import Slug
 from limits import Limits
+import packets
 
 pygame.init()
 
@@ -63,7 +64,10 @@ class Program:
             self.listenThread.start()
             self.player = Ship()
             self.ships.append(self.player)
+
+
             # Need to get the map from the server
+
     def loadMap(self):
             for iq in range(0,3):
                 self.planets.append(Planet(random.random()*100+50, 400, Vector(random.random()*Program.SCREEN_WIDTH, random.random()*Program.SCREEN_HEIGHT)))
@@ -77,6 +81,7 @@ class Program:
             
             if (self.server):
                 self.updateClients()
+
             self.updateShips()
             self.updateSlugs()
             self.render()
@@ -106,11 +111,24 @@ class Program:
             conn, addr = self.socket.accept()
             self.clients.append(Client(conn, addr))
             print("Just had a connection from [",addr,"]")
+            # sending the map
+
+            conn.send()
 
     def updateClients(self):
         """ Send packets to the clients """
+        packet_ships = []
+        for ship in self.ships:
+            packet_ships.append(packets.Ship.toPacket(ship))
+        packet_slugs = []
+        for slug in self.slugs:
+            packet_slugs.append(packets.Slug.toPacket(slug))
+
+        state = packets.State(packet_ships, packet_slugs)
+        data = bytes(state.toJSON(),"utf-8")
         for client in self.clients:
-            print("Pretending to send a packet to client BOOP")
+            print("YOU HAVE BEEN UPDATED")
+            client.conn.send(data)
 
     def updateEvents(self):
         for event in pygame.event.get():
@@ -169,3 +187,6 @@ if __name__ == "__main__":
         server = False
     p = Program(server)
     p.run()
+
+
+print("DONE AND DUSTED")
