@@ -15,6 +15,7 @@ Ideas:
 - Energy depletes through use
 - space anomolies e.g. blackholes, light bursts.
 - varying game modes.
+- damage will effect how much energy you can put in each department. (random)
 
 # Tasks
 - Get a basic window up and running. DONE
