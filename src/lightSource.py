@@ -10,5 +10,4 @@ class LightSource():
     def get_energy(self, shippos):
         separation = (self.position.sub(shippos)).mag()
         energy = self.intensity/(separation*separation)
-        print("charging",energy)
         return energy
