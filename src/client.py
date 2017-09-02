@@ -2,6 +2,9 @@
 # Shooty Bang Space Wars - Client
 
 import socket
+import pygame
+
+
 HOST = 'localhost'              
 PORT = 50007                 
 SCREEN_WIDTH = 800              
@@ -20,37 +23,36 @@ def connect():
     s.close()
     print('Received', repr(data))
 
+connect()
+# pygame.init()
+# size = (SCREEN_WIDTH, SCREEN_HEIGHT)
+# screen = pygame.display.set_mode(size)
+# pygame.display.set_caption("Shooty Bang Space Wars")
+# clock = pygame.time.Clock()
 
+# planets = []
+# ships = []
+# frames = 0
+# while not done:
+#     for event in pygame.event.get():
+#         if event.type == pygame.QUIT:
+#             done = True
+#             screen.fill(WHITE)
 
-pygame.init()
-size = (SCREEN_WIDTH, SCREEN_HEIGHT)
-screen = pygame.display.set_mode(size)
-pygame.display.set_caption("Shooty Bang Space Wars")
-clock = pygame.time.Clock()
+#     for bullet in bullets:
+#         sprites.add(bullet)
 
-planets = []
-ships = []
-frames = 0
-while not done:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            done = True
-            screen.fill(WHITE)
+#     for planet in planets:
+#         planet.show(screen)
 
-    for bullet in bullets:
-        sprites.add(bullet)
+#     sprites.draw(screen)
 
-    for planet in planets:
-        planet.show(screen)
+#     font = pygame.font.SysFont('Calibri', 25, True, False)
+#     text = font.render(str(frames), True, WHITE)
+#     screen.blit(text, [SCREEN_WIDTH-100, 10])
 
-    sprites.draw(screen)
-
-    font = pygame.font.SysFont('Calibri', 25, True, False)
-    text = font.render(str(frames), True, WHITE)
-    screen.blit(text, [SCREEN_WIDTH-100, 10])
-
-    pygame.display.flip()
-    frames+=1
-    clock.tick(30)
+#     pygame.display.flip()
+#     frames+=1
+#     clock.tick(30)
  
-pygame.quit()
+# pygame.quit()
