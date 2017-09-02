@@ -149,6 +149,10 @@ class Program:
         for ship in self.ships:
             ship.update_gravity(self.planets)
             ship.update_regen(self.lightSources)
+            path = Spline(ship,planets)
+            splinePoints = path.get_prediction(10)
+            for Vector in splinePoints:
+                surface.set_at((Vector.x,Vector.Y), color)
             for planet in self.planets:
                 Damage.determineThingPlanetDamage(ship, planet)
             newSlugs = ship.update()
