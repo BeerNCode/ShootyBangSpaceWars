@@ -26,6 +26,7 @@ class Program:
         RED = (255, 0, 0)
 
     class Fonts:
+        pygame.font.init()
         TITLE = pygame.font.SysFont('Calibri', 25, True, False)
 
     pygame.init()
