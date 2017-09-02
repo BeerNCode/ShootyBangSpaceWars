@@ -13,7 +13,7 @@ SLUG_ENERGY = 5
 THRUST_ENERGY = 1
 THRUST = 10
 RVEL_DECAY = 0.975
-TURN_ACC = 0.01
+TURN_ACC = 0.002
 ENERGY_REGEN = 0.5
 
 class Ship(Thing):
@@ -26,8 +26,12 @@ class Ship(Thing):
         self.sprites = {}
         self.add_sprite("base", "../img/BaseSpaceship.png", WHITE)
         self.add_sprite("thrust", "../img/BaseSpaceshipForward.png", WHITE)
-        self.add_sprite("thrustClockwise", "../img/BaseSpaceshipLeft.png", WHITE)
-        self.add_sprite("thrustAClockwise", "../img/BaseSpaceshipRight.png", WHITE)
+        self.add_sprite("Clockwise", "../img/BaseSpaceshipLeft.png", WHITE)
+        self.add_sprite("AClockwise", "../img/BaseSpaceshipRight.png", WHITE)
+        self.add_sprite("thrustClockwise", "../img/BaseSpaceshipForwardLeft.png", WHITE)
+        self.add_sprite("thrustAClockwise", "../img/BaseSpaceshipForwardRight.png", WHITE)
+        self.add_sprite("boost", "../img/BaseSpaceshipHalfBurn.png", WHITE)
+        self.add_sprite("FULLBURN", "../img/BaseSpaceshipFullBurn.png", WHITE)
         self.set_sprite("base")
         self.image = self.original_image
         self.rect = self.image.get_rect()
@@ -48,23 +52,22 @@ class Ship(Thing):
         self.rvel = self.rvel*RVEL_DECAY
         b = []
         keys=pygame.key.get_pressed()
+        thrusting = False
+        boosting = False
+        portTurn = False
+        starboardTurn = False
+        fullBurn = False
         
         self.set_sprite("base")
         
         if keys[pygame.K_LEFT]:
-            self.set_sprite("thrustAClockwise")
-            self.energy -= THRUST_ENERGY/2
-            self.rvel -= TURN_ACC
+            portTurn = True
         if keys[pygame.K_RIGHT]:
-            self.set_sprite("thrustClockwise")
-            self.energy -= THRUST_ENERGY/2
-            self.rvel += TURN_ACC
+            starboardTurn = True
         if keys[pygame.K_UP]:
-            if self.energy >= THRUST_ENERGY:
-                self.set_sprite("thrust")
-                self.energy -= THRUST_ENERGY
-                thrust = Vector.fromAngle(self.rpos).mult(THRUST)
-                self.addForce(thrust)
+            thrusting = True
+        if keys[pygame.K_DOWN]:
+            boosting = True
         if keys[pygame.K_SPACE]:
             if (self.energy >= SLUG_ENERGY):
                 b.append(Slug(self.pos,self.vel.add(Vector.fromAngle(self.rpos).mult(SLUG_SPEED)), self.rpos))
@@ -73,6 +76,54 @@ class Ship(Thing):
         if (self.energy < 100):
             self.energy += ENERGY_REGEN
         self.hull = max(0, 100-self.damage)
+        
+        if(portTurn and starboardTurn):
+            portTurn = False
+            starboardTurn = False
+            if(boosting):
+                fullBurn = True
+        else:
+            fullBurn = False
+            
+            
+        thrust = Vector(0,0)
+        if (fullBurn):
+            thrust = Vector.fromAngle(self.rpos).mult(30)
+            self.set_sprite("FULLBURN")
+        elif (thrusting and boosting):
+            thrust = Vector.fromAngle(self.rpos).mult(20)
+            self.set_sprite("boost")
+        elif (thrusting):
+            thrust = Vector.fromAngle(self.rpos).mult(10)
+            if (portTurn):
+                self.rvel -= TURN_ACC
+                self.set_sprite("thrustAClockwise")
+            elif (starboardTurn):
+                self.rvel += TURN_ACC
+                self.set_sprite("thrustClockwise")
+            else:
+                self.set_sprite("thrust")
+        else:
+            if (portTurn):
+                self.rvel -= TURN_ACC
+                self.set_sprite("AClockwise")
+            elif (starboardTurn):
+                self.rvel += TURN_ACC
+                self.set_sprite("Clockwise")
+            else:
+                self.set_sprite("base")
+                
+        self.addForce(thrust)
+                
+                
+        
+
+        
+        
+        
+        
+        
+        
         super().update()
         return b
 
