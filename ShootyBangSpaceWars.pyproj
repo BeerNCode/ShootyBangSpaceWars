@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{a9462575-60c2-42dd-bff6-e7d81db1b5bf}</ProjectGuid>
     <ProjectHome />
-    <StartupFile>src\shootybangspacewars.py</StartupFile>
+    <StartupFile>src\__main__.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>src</WorkingDirectory>
