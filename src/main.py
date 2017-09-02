@@ -92,8 +92,8 @@ while not done:
     sprites.draw(screen)
 
     font = pygame.font.SysFont('Calibri', 25, True, False)
-    text = font.render(str(frames), True, WHITE)
-    screen.blit(text, [SCREEN_WIDTH-100, 10])
+    screen.blit(font.render(str(frames), True, WHITE), [SCREEN_WIDTH-100, 10])
+    screen.blit(font.render(str(ship.damage), True, WHITE), [SCREEN_WIDTH-100, 20])
 
     pygame.display.flip()
     frames+=1

@@ -8,6 +8,7 @@ WHITE = (255, 255, 255)
 ENERGY_COLOUR = (100, 100, 0)
 HEALTH_COLOUR = (70, 255, 50)
 
+SLUG_ENERGY = 5
 THRUST_ENERGY = 1
 RVEL_DECAY = 0.975
 TURN_ACC = 0.001
@@ -47,7 +48,7 @@ class Ship(Thing):
         if keys[pygame.K_RIGHT]:
             self.rvel += TURN_ACC
         if keys[pygame.K_UP]:
-            if self.energy > THRUST_ENERGY:
+            if self.energy >= THRUST_ENERGY:
                 self.set_sprite("thrust")
                 self.energy -= THRUST_ENERGY
                 thrust = Vector.fromAngle(self.rpos).mult(10)
@@ -55,9 +56,9 @@ class Ship(Thing):
         else:
             self.set_sprite("base")
         if keys[pygame.K_SPACE]:
-            if (self.energy > 5):
+            if (self.energy >= SLUG_ENERGY):
                 b.append(Slug(self.pos,self.vel.add(Vector.fromAngle(self.rpos).mult(2)), self.rpos))
-                self.energy -= 5
+                self.energy -= SLUG_ENERGY
             firing = True
         if (self.energy < 100):
             self.energy += ENERGY_REGEN
@@ -67,9 +68,12 @@ class Ship(Thing):
 
     def show(self, screen):
         bar_width = 32
-        bar_height = 10
-        pygame.draw.rect(screen, ENERGY_COLOUR, [self.pos.x-self.radius/2, self.pos.y+self.radius, self.energy*32/100, bar_height], 0)
-        pygame.draw.rect(screen, HEALTH_COLOUR, [self.pos.x-self.radius/2, self.pos.y+self.radius+bar_height, self.hull*32/100, bar_height], 0)
+        bar_height = 5
+        bar_margin = 1
+        if self.energy > 0:
+            pygame.draw.rect(screen, ENERGY_COLOUR, [self.pos.x-self.radius, self.pos.y+self.radius, self.energy*32/100, bar_height], 0)
+        if self.hull > 0:
+            pygame.draw.rect(screen, HEALTH_COLOUR, [self.pos.x-self.radius, self.pos.y+self.radius+bar_height+bar_margin, self.hull*32/100, bar_height], 0)
 
 
 
