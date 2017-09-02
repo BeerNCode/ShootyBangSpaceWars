@@ -16,7 +16,7 @@ Ideas:
 - space anomolies e.g. blackholes, light bursts.
 
 # Tasks
-- Get a basic window up and running.
+- Get a basic window up and running. DONE
 - Spacestation bases.
 - Gravity.
 - Energy distribution.
@@ -24,9 +24,9 @@ Ideas:
 - Awesome music.
 - Multiplayer.
 - Sprites.
+- View Panning TJD
 
 # Controls
-
 - up arrow - move forward
 - left arrow - runs thruster on the left
 - right arrow - runs thruster on the right

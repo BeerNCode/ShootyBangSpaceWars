@@ -40,8 +40,11 @@ class Thing(pygame.sprite.Sprite):
         for thing in masses:
             separation = thing.pos.sub(self.pos)
             m = separation.mag()
-            acc.add(thing.mass * separation.normalise()/(m*m))
-        self.vel.add(acc)
+            if (m < thing.radius+self.radius):
+                m = self.radius+thing.radius
+            acc = acc.add(separation.normalise().mult(1/(m*m)).mult(thing.mass))
+        print("acc: "+str(acc.x)+":"+str(acc.y))
+        self.vel = self.vel.add(acc)
 
     def show(self, screen):
         pygame.draw.ellipse(screen, WHITE, [x, 20, 250, 100], 2)
