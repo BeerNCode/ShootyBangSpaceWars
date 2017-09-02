@@ -1,8 +1,10 @@
 from vector import Vector 
 from thing import Thing
 from slug import Slug
+from sounds import Sounds, Sound
 import math
 import pygame
+import globals
 
 WHITE = (255, 255, 255)
 ENERGY_COLOUR = (100, 0, 100)
@@ -73,6 +75,7 @@ class Ship(Thing):
             if (self.energy >= SLUG_ENERGY):
                 b.append(Slug(self.pos,self.vel.add(Vector.fromAngle(self.rpos).mult(SLUG_SPEED)), self.rpos))
                 self.energy -= SLUG_ENERGY
+                globals.sounds.play(Sound.Fire)
             firing = True
         if (self.energy < ENERGYCAP):
             self.energy += ENERGY_REGEN
@@ -86,7 +89,9 @@ class Ship(Thing):
         else:
             fullBurn = False
             
-            
+        if (fullBurn or thrusting or boosting or portTurn or starboardTurn):
+            globals.sounds.play(Sound.Thrust)
+
         thrust = Vector(0,0)
         if (fullBurn):
             thrust = Vector.fromAngle(self.rpos).mult(30)
@@ -114,6 +119,7 @@ class Ship(Thing):
                 self.energy -= 0.5
                 self.set_sprite("Clockwise")
             else:
+                globals.sounds.stop(Sound.Thrust)
                 self.set_sprite("base")
                 
         energyCost = (thrust.mag()**1.3)*THRUST_ENERGY_FACTOR

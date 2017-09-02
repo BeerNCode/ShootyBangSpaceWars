@@ -82,6 +82,10 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="README.md" />
+    <Content Include="snd\Adjust.wav" />
+    <Content Include="snd\In Flight.wav" />
+    <Content Include="snd\Laser 9.wav" />
+    <Content Include="snd\Take Off.wav" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\globals.py">
@@ -96,6 +100,9 @@
     <Compile Include="src\planet.py" />
     <Compile Include="src\ship.py" />
     <Compile Include="src\slug.py" />
+    <Compile Include="src\sounds.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="src\thing.py" />
     <Compile Include="src\vector.py" />
     <Compile Include="src\viewport.py">
@@ -107,6 +114,7 @@
   <ItemGroup>
     <Folder Include="img" />
     <Folder Include="maps\" />
+    <Folder Include="snd\" />
     <Folder Include="src" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />

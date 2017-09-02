@@ -50,7 +50,7 @@ class Program:
         self.running = True
         self.viewport = Viewport(Vector(self.SCREEN_WIDTH/2, self.SCREEN_HEIGHT/2), self.SCREEN_WIDTH, self.SCREEN_HEIGHT)
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        
+
         if self.server:
             for iq in range(0,3):
                 self.planets.append(Planet(20, 400, Vector(random.random()*globals.MAP_WIDTH, random.random()*globals.MAP_HEIGHT)))
