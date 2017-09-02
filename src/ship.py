@@ -21,10 +21,10 @@ class Ship(Thing):
         """ Construcz """
         Thing.__init__(self)
         self.sprites = {}
-        self.add_sprite("base", "../img/spaceship.png", WHITE)
-        self.add_sprite("thrust", "../img/spaceship_thrust.png", WHITE)
-        self.add_sprite("thrustClockwise", "../img/spaceship_thrust.png", WHITE)
-        self.add_sprite("thrustAClockwise", "../img/spaceship_thrust.png", WHITE)
+        self.add_sprite("base", "../img/BaseSpaceship.png", WHITE)
+        self.add_sprite("thrust", "../img/BaseSpaceshipForward.png", WHITE)
+        self.add_sprite("thrustClockwise", "../img/BaseSpaceshipLeft.png", WHITE)
+        self.add_sprite("thrustAClockwise", "../img/BaseSpaceshipRight.png", WHITE)
         self.set_sprite("base")
         self.image = self.original_image
         self.rect = self.image.get_rect()
@@ -45,6 +45,9 @@ class Ship(Thing):
         self.rvel = self.rvel*RVEL_DECAY
         b = []
         keys=pygame.key.get_pressed()
+        
+        self.set_sprite("base")
+        
         if keys[pygame.K_LEFT]:
             self.set_sprite("thrustAClockwise")
             self.energy -= THRUST_ENERGY/2
@@ -59,8 +62,6 @@ class Ship(Thing):
                 self.energy -= THRUST_ENERGY
                 thrust = Vector.fromAngle(self.rpos).mult(10)
                 self.addForce(thrust)
-        else:
-            self.set_sprite("base")
         if keys[pygame.K_SPACE]:
             if (self.energy >= SLUG_ENERGY):
                 b.append(Slug(self.pos,self.vel.add(Vector.fromAngle(self.rpos).mult(2)), self.rpos))
