@@ -5,6 +5,13 @@ import math
 import pygame
 
 WHITE = (255, 255, 255)
+ENERGY_COLOUR = (100, 100, 0)
+HEALTH_COLOUR = (70, 255, 50)
+
+THRUST_ENERGY = 1
+RVEL_DECAY = 0.975
+TURN_ACC = 0.001
+ENERGY_REGEN = 0.5
 
 class Ship(Thing):
     """ Ship It """
@@ -18,7 +25,8 @@ class Ship(Thing):
         self.set_sprite("base")
         self.image = self.original_image
         self.rect = self.image.get_rect()
-        self.energy = 88
+        self.energy = 50
+        self.hull = 100
 
     def add_sprite(self, id, filePath, background):
         sp = pygame.image.load(filePath).convert()
@@ -31,17 +39,19 @@ class Ship(Thing):
 
     def update(self):
         firing = False
-        self.rvel = self.rvel*0.985
+        self.rvel = self.rvel*RVEL_DECAY
         b = []
         keys=pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
-            self.rvel -= 0.001
+            self.rvel -= TURN_ACC
         if keys[pygame.K_RIGHT]:
-            self.rvel += 0.001
+            self.rvel += TURN_ACC
         if keys[pygame.K_UP]:
-            self.set_sprite("thrust")
-            thrust = Vector.fromAngle(self.rpos).mult(10)
-            self.addForce(thrust)
+            if self.energy > THRUST_ENERGY:
+                self.set_sprite("thrust")
+                self.energy -= THRUST_ENERGY
+                thrust = Vector.fromAngle(self.rpos).mult(10)
+                self.addForce(thrust)
         else:
             self.set_sprite("base")
         if keys[pygame.K_SPACE]:
@@ -50,11 +60,16 @@ class Ship(Thing):
                 self.energy -= 5
             firing = True
         if (self.energy < 100):
-            self.energy += 0.5
-
-
+            self.energy += ENERGY_REGEN
+        self.hull = max(0, 100-self.damage)
         super().update()
         return b
 
     def show(self, screen):
-        pygame.draw.rect(screen, (100, 0, 100), [self.pos.x-16, self.pos.y+16, self.energy*32/100, 5], 0)
+        bar_width = 32
+        bar_height = 10
+        pygame.draw.rect(screen, ENERGY_COLOUR, [self.pos.x-self.radius/2, self.pos.y+self.radius, self.energy*32/100, bar_height], 0)
+        pygame.draw.rect(screen, HEALTH_COLOUR, [self.pos.x-self.radius/2, self.pos.y+self.radius+bar_height, self.hull*32/100, bar_height], 0)
+
+
+

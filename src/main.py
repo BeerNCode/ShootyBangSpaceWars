@@ -8,6 +8,7 @@ from vector import Vector
 from time import sleep
 from damage import Damage
 from slug import Slug
+from limits import Limits
 
 SCREEN_WIDTH = 1024
 SCREEN_HEIGHT = 576
@@ -75,6 +76,13 @@ while not done:
 
     for slug in slugs:
         slug.update_gravity(planets)
+        if not map_limits.contains(slug.pos):
+            slugs.remove(slug)
+        for planet in planets:
+            vec = slug.pos.sub(planet.pos)
+            mag = vec.mag()
+            if mag < planet.radius:
+                slugs.remove(slug)
         slug.update()
         sprites.add(slug)
 

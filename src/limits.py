@@ -2,7 +2,7 @@
 
 class Limits():
 
-    def __init__(min_point, max_point):
+    def __init__(self, min_point, max_point):
         self.min_point = min_point
         self.max_point = max_point
 
