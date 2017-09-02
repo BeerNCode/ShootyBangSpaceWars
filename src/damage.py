@@ -35,8 +35,8 @@ class Damage():
             #apply damage
             thing1.damage += thingVelInDir*thing2.mass
             thing2.damage += thingVelInDir*thing1.mass
-            thing1.vel = thing1.vel.sub(dir.mult(thing1VelInDir)*(thing2.mass)/(thing1.mass+thing2.mass))
-            thing2.vel = thing2.vel.sub(dir.mult(-1*thing1VelInDir*(thing1.mass)/(thing1.mass+thing2.mass)))
+            thing1.vel = thing1.vel.sub(dir.normalise().mult(1*thingVelInDir*(thing2.mass)/(thing1.mass+thing2.mass)))
+            thing2.vel = thing2.vel.sub(dir.normalise().mult(-1*thingVelInDir*(thing1.mass)/(thing1.mass+thing2.mass)))
 
     @staticmethod
     def calculateThingPlanetDamage(thing,planet):

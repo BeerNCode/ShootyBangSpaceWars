@@ -32,7 +32,7 @@ done = False
 
 planets = []
 for i in range(0,10):
-    planets.append(Planet(random.random()*100+20, 1000, Vector(random.random()*SCREEN_WIDTH, random.random()*SCREEN_HEIGHT)))
+    planets.append(Planet(random.random()*25+20, 100, Vector(random.random()*SCREEN_WIDTH, random.random()*SCREEN_HEIGHT)))
 
 ships = []
 bullets = []
