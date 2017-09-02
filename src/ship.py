@@ -10,7 +10,7 @@ HEALTH_COLOUR = (70, 255, 150)
 
 SLUG_SPEED = 20
 SLUG_ENERGY = 5
-THRUST_ENERGY = 1
+THRUST_ENERGY_FACTOR = 0.04
 THRUST = 10
 RVEL_DECAY = 0.975
 TURN_ACC = 0.002
@@ -106,14 +106,21 @@ class Ship(Thing):
         else:
             if (portTurn):
                 self.rvel -= TURN_ACC
+                self.energy -= 0.5
                 self.set_sprite("AClockwise")
             elif (starboardTurn):
                 self.rvel += TURN_ACC
+                self.energy -= 0.5
                 self.set_sprite("Clockwise")
             else:
                 self.set_sprite("base")
                 
-        self.addForce(thrust)
+        energyCost = (thrust.mag()**1.3)*THRUST_ENERGY_FACTOR
+        if(self.energy >= energyCost):
+            self.addForce(thrust)
+            self.energy -= energyCost
+        else:
+            self.set_sprite("base")
                 
                 
         
