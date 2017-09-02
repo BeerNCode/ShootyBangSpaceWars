@@ -75,6 +75,13 @@ class Program():
                 print("Quitting the game")
                 self.running = False
                 screen.fill(WHITE)
+            if event.type == pygame.VIDEORESIZE:
+                screen = pygame.display.set_mode((event.w, event.h),
+                                                  pygame.RESIZABLE) 
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    done = True
+                    screen.fill(WHITE)
 
     def render(self):
         screen.fill(BLACK)
