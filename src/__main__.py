@@ -3,6 +3,9 @@ import time
 import math
 import random
 import sys
+import socket
+from client import Client
+from threading import Thread
 from ship import Ship
 from planet import Planet
 from vector import Vector
@@ -48,11 +51,11 @@ class Program():
         if self.server:
             self.loadMap()
             self.clients = []
-            self.newClientsThread = Thread(target=listenForNewServer)
+            self.newClientsThread = Thread(target=self.listenForNewClients)
             self.newClientsThread.start()
         else:
             self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            self.listenThread = Thread(target=listenToServer)
+            self.listenThread = Thread(target=self.listenToServer)
             self.listenThread.start()
             self.player = Ship()
             self.ships.append(self.player)
@@ -67,6 +70,8 @@ class Program():
 
             print("Step: "+str(self.frames))
             self.updateEvents()    
+            if not self.running:
+                break
             self.updateShips()
             self.updateSlugs()
             self.render()
@@ -92,7 +97,7 @@ class Program():
 
     def listenForNewClients(self):
         while True:
-            conn, addr = s.accept()
+            conn, addr = self.socket.accept()
             clients.append(Client(conn, addr))
             print("Connection from [",addr,"]")
             while True:
@@ -102,7 +107,7 @@ class Program():
 
     def updateClients(self):
         """ Send packets to the clients """
-        for client in self.clients:
+        # for client in self.clients:
 
 
     def updateEvents(self):
