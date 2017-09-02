@@ -19,16 +19,12 @@ class Thing(pygame.sprite.Sprite):
 
     def update(self):
         """updated the physics of the thing"""
-        print("pos", str(self.pos.x), str(self.pos.y))
-        print("vel", str(self.vel.x), str(self.vel.y))
         self.pos = self.pos.add(self.vel)
         self.rpos += self.rvel
         if self.rpos < 0:
             self.rpos = 2*math.pi
         if self.rpos > 2*math.pi:
             self.rpos = 0
-
-        print("Ship is at ", self.rpos, "rad with rvel of ", self.rvel)
 
         self.image = pygame.transform.rotate(self.original_image, -self.rpos * 180 / math.pi)
         self.rect = self.image.get_rect()
@@ -43,7 +39,6 @@ class Thing(pygame.sprite.Sprite):
             if (m < thing.radius+self.radius):
                 m = self.radius+thing.radius
             acc = acc.add(separation.normalise().mult(1/(m*m)).mult(thing.mass))
-        print("acc: "+str(acc.x)+":"+str(acc.y))
         self.vel = self.vel.add(acc)
 
     def show(self, screen):

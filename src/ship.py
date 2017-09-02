@@ -20,17 +20,17 @@ class Ship(Thing):
 
     def update(self):
         firing = False
-        b = None
+        b = []
         keys=pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
-            self.rvel -= 0.005
+            self.rvel -= 0.001
         if keys[pygame.K_RIGHT]:
-            self.rvel += 0.005
+            self.rvel += 0.001
         if keys[pygame.K_UP]:
             thrust = Vector.fromAngle(self.rpos).mult(10)
             self.addForce(thrust)
         if keys[pygame.K_SPACE]:
-            b = Slug(self.pos,self.vel)
+            b.append(Slug(self.pos,self.vel.add(Vector.fromAngle(self.rpos).mult(20)), self.rpos))
             firing = True
         super().update()
         return b
