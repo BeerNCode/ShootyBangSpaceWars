@@ -34,7 +34,7 @@ map_limits = Limits(Vector(0, 0), Vector(5000, 5000))
 ship = Ship()
 ships.append(ship)
 for i in range(0,2):
-    planets.append(Planet(50, 1000, Vector(random.random()*SCREEN_WIDTH, random.random()*SCREEN_HEIGHT)))
+    planets.append(Planet(random.random()*50+50, 100, Vector(random.random()*SCREEN_WIDTH, random.random()*SCREEN_HEIGHT)))
 
 frames = 0
 while not done:
