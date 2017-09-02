@@ -14,6 +14,7 @@ Ideas:
 - Energy recovers quicker around light due to solar panels.
 - Energy depletes through use
 - space anomolies e.g. blackholes, light bursts.
+- varying game modes.
 
 # Tasks
 - Get a basic window up and running. DONE
