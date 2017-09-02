@@ -13,7 +13,7 @@ SLUG_ENERGY = 5
 THRUST_ENERGY = 1
 THRUST = 10
 RVEL_DECAY = 0.975
-TURN_ACC = 0.002
+TURN_ACC = 0.01
 ENERGY_REGEN = 0.5
 
 class Ship(Thing):
@@ -112,18 +112,7 @@ class Ship(Thing):
                 self.set_sprite("Clockwise")
             else:
                 self.set_sprite("base")
-                
         self.addForce(thrust)
-                
-                
-        
-
-        
-        
-        
-        
-        
-        
         super().update()
         return b
 
