@@ -78,6 +78,7 @@
     <Content Include="img\Turret Blast.png">
       <Publish>True</Publish>
     </Content>
+    <Content Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\damage.py" />
