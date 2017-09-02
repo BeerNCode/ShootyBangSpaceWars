@@ -44,6 +44,11 @@ Ideas:
 - Tab - Open up scoreboard
 - Esc - Open menu
 
+(optional)
+- 1-9 - Special equipment usage
+- r - increase energy on HUD
+- f - decrease energy on HUD
+
 menu controls
 - up - move up selection
 - down - move down selection
