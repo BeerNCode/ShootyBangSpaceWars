@@ -89,25 +89,25 @@ class Program:
             # else:
             #     print("CLIENT: "+str(self.frames))
             try:
-            self.updateEvents()
-            if not self.running:
+                self.updateEvents()
+                if not self.running:
                     print("No more looping..")
-                break
+                    break
             
                 if self.server:
-            self.updateShips()
-            self.updateSlugs()
+                    self.updateShips()
+                    self.updateSlugs()
                     self.sendClientsUpdate()
                 else:
                     self.sendServerUpdate()
 
-            self.render()
+                self.render()
             
-            if not self.server:
+                if not self.server:
                     self.screen.blit(globals.Fonts.TITLE.render(str(self.frames), True, globals.WHITE), [Program.SCREEN_WIDTH-100, 10])
                     self.screen.blit(globals.Fonts.TITLE.render(str(self.player.damage), True, globals.WHITE), [Program.SCREEN_WIDTH-100, 20])
 
-            pygame.display.flip()
+                pygame.display.flip()
             except Exception:
                 exc_type, exc_value, exc_traceback = sys.exc_info()
                 traceback.print_exception(exc_type, exc_value, exc_traceback)
