@@ -29,6 +29,9 @@ Ideas:
 - View Panning TJD
 
 # Controls
+
+Flying
+
 - up arrow - move forward
 - left arrow - runs thruster on the left
 - right arrow - runs thruster on the right
@@ -48,6 +51,7 @@ Ideas:
 - 1-9 - Special equipment usage
 - r - increase energy on HUD
 - f - decrease energy on HUD
+- enter - Dock / undock with space station
 
 menu controls
 - up - move up selection
@@ -81,7 +85,7 @@ menu controls
   - level 2 - shows hull damage, shows equipment energy usage, (what points are being used where)
   - level 3 - unlock showing allies on radar and planets
   - level 4 - radar shows enemies and asteroids
-  - level 5 - shows gravitational pull and special equipment on screen
+  - level 5 - shows navigation trajectory and special equipment on screen
   
   # Sound files
   Advised that it'll be finished by 2pm. 
@@ -110,7 +114,7 @@ menu controls
   - Rockets - Avoids Shields
   - Nitro - Gives an extra boost on thrusters in a forward direction
   - repair bots - repairs damage over time.
-- gravitational pull
+- navigation tracking - predicts your trajectory route
 
 
 # Dev

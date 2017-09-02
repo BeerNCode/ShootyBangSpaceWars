@@ -7,6 +7,7 @@ import socket
 from client import Client
 from threading import Thread
 from ship import Ship
+from spline import Spline
 from planet import Planet
 from lightSource import LightSource
 from vector import Vector
@@ -50,7 +51,7 @@ class Program:
         self.running = True
         self.viewport = Viewport(Vector(self.SCREEN_WIDTH/2, self.SCREEN_HEIGHT/2), self.SCREEN_WIDTH, self.SCREEN_HEIGHT)
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
+        
         if self.server:
             for iq in range(0,3):
                 self.planets.append(Planet(20, 400, Vector(random.random()*globals.MAP_WIDTH, random.random()*globals.MAP_HEIGHT)))
@@ -136,6 +137,10 @@ class Program:
         self.viewport.updateMidPoint(self.player.pos)
         for idx, ship in enumerate(self.ships):
             ship.render(self.viewport)
+            path = Spline(ship,self.planets)
+            splinePoints = path.get_prediction(60)
+            for Vector in splinePoints:
+                pygame.draw.rect(self.screen, globals.WHITE, [Vector.x, Vector.y, 1, 1], 0)
             ship.showStatus(self.screen, idx)
             sprites.add(ship)
         for slug in self.slugs:
