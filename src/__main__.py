@@ -14,26 +14,25 @@ from damage import Damage
 from slug import Slug
 from limits import Limits
 
-SCREEN_WIDTH = 1024
-SCREEN_HEIGHT = 768
 
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
-GREEN = (0, 255, 0)
-RED = (255, 0, 0)
+class Program:
+    SCREEN_WIDTH = 1024
+    SCREEN_HEIGHT = 768
 
-pygame.init()
+    class Colours:
+        BLACK = (0, 0, 0)
+        WHITE = (255, 255, 255)
+        GREEN = (0, 255, 0)
+        RED = (255, 0, 0)
 
-FONTS = {}
-FONTS["title"] = pygame.font.SysFont('Calibri', 25, True, False)
-font = pygame.font.SysFont('Calibri', 25, True, False) # This will be deprecated and replaced with a dictionary of fonts for the theme
+    class Fonts:
+        TITLE = pygame.font.SysFont('Calibri', 25, True, False)
 
-clock = pygame.time.Clock()
-pygame.display.set_caption("Shooty Bang Space Wars")
-size = (SCREEN_WIDTH, SCREEN_HEIGHT)
-screen = pygame.display.set_mode(size, pygame.RESIZABLE)
-
-class Program():
+    pygame.init()
+    pygame.display.set_caption("Shooty Bang Space Wars")
+    clock = pygame.time.Clock()
+    size = (SCREEN_WIDTH, SCREEN_HEIGHT)
+    screen = pygame.display.set_mode(size, pygame.RESIZABLE)
 
     def __init__(self, server):
         if server:
@@ -77,8 +76,8 @@ class Program():
             self.render()
             
             if not self.server:
-                screen.blit(font.render(str(self.frames), True, WHITE), [SCREEN_WIDTH-100, 10])
-                screen.blit(font.render(str(self.player.damage), True, WHITE), [SCREEN_WIDTH-100, 20])
+                screen.blit(TITLE.render(str(self.frames), True, WHITE), [SCREEN_WIDTH-100, 10])
+                screen.blit(TITLE.render(str(self.player.damage), True, WHITE), [SCREEN_WIDTH-100, 20])
 
             pygame.display.flip()
             self.frames+=1
