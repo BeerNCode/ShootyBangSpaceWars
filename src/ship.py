@@ -15,6 +15,7 @@ THRUST = 10
 RVEL_DECAY = 0.975
 TURN_ACC = 0.002
 ENERGY_REGEN = 0.5
+ENERGYCAP = 100
 
 class Ship(Thing):
     """ Ship It """
@@ -73,7 +74,7 @@ class Ship(Thing):
                 b.append(Slug(self.pos,self.vel.add(Vector.fromAngle(self.rpos).mult(SLUG_SPEED)), self.rpos))
                 self.energy -= SLUG_ENERGY
             firing = True
-        if (self.energy < 100):
+        if (self.energy < ENERGYCAP):
             self.energy += ENERGY_REGEN
         self.hull = max(0, 100-self.damage)
         
@@ -124,6 +125,14 @@ class Ship(Thing):
         
         super().update()
         return b
+    
+    def update_regen(self, lightSources):
+        if (self.energy <= ENERGYCAP*2):
+            for LightSource in lightSources:
+                print("called")
+                self.energy = self.energy + LightSource.get_energy(self.pos)
+                print("charging",LightSource.get_energy(self.pos))
+    
 
     def showStatus(self, screen, index):
         bar_width = 75
