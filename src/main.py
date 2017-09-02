@@ -22,10 +22,11 @@ pygame.init()
 
 
 size = (SCREEN_WIDTH, SCREEN_HEIGHT)
-screen = pygame.display.set_mode(size)
+screen = pygame.display.set_mode(size, pygame.RESIZABLE)
 bg = pygame.image.load("../img/backdrop.png")
 
 pygame.display.set_caption("Shooty Bang Space Wars")
+
 
 clock = pygame.time.Clock()
 
@@ -48,6 +49,16 @@ while not done:
         if event.type == pygame.QUIT:
             done = True
             screen.fill(WHITE)
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                done = True
+                screen.fill(WHITE)
+        if event.type == pygame.VIDEORESIZE:
+            # The main code that resizes the window:
+            # (recreate the window with the new size)
+            screen = pygame.display.set_mode((event.w, event.h),
+                                              pygame.RESIZABLE)
+            
     
     # Update the game physics
     # for ship in ships:
