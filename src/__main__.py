@@ -91,25 +91,25 @@ class Program:
             # else:
             #     print("CLIENT: "+str(self.frames))
             try:
-            self.updateEvents()
-            if not self.running:
+                self.updateEvents()
+                if not self.running:
                     print("No more looping..")
-                break
+                    break
             
-                if self.server:
-            self.updateShips()
-            self.updateSlugs()
-                    self.sendClientsUpdate()
-                else:
-                    self.sendServerUpdate()
+                    if self.server:
+                        self.updateShips()
+                        self.updateSlugs()
+                        self.sendClientsUpdate()
+                    else:
+                        self.sendServerUpdate()
 
-            self.render()
+                    self.render()
             
-            if not self.server:
+                if not self.server:
                     self.screen.blit(globals.Fonts.TITLE.render(str(self.frames), True, Colours.WHITE), [Program.SCREEN_WIDTH-100, 10])
                     self.screen.blit(globals.Fonts.TITLE.render(str(self.player.damage), True, Colours.WHITE), [Program.SCREEN_WIDTH-100, 20])
 
-            pygame.display.flip()
+                pygame.display.flip()
             except Exception:
                 exc_type, exc_value, exc_traceback = sys.exc_info()
                 traceback.print_exception(exc_type, exc_value, exc_traceback)
@@ -231,23 +231,22 @@ class Program:
         self.screen.fill(globals.BLACK)
         sprites = pygame.sprite.Group()
         if not self.server:
-        self.viewport.updateMidPoint(self.player.pos)
-        for idx, ship in enumerate(self.ships):
-            ship.render(self.viewport)
-            path = Spline(ship,self.planets)
-            splinePoints = path.get_prediction(30)
-            for RenderablePoint in splinePoints:
-                RenderablePoint.render(self.viewport)
-                sprites.add(RenderablePoint)
-            ship.showStatus(self.screen, idx)
-            sprites.add(ship)
-        for slug in self.slugs:
-            slug.render(self.viewport)
-            sprites.add(slug)
-        for planet in self.planets:
-            planet.render(self.viewport)
-            sprites.add(planet)
-        sprites.draw(self.screen)
+            self.viewport.updateMidPoint(self.player.pos)
+            for idx, ship in enumerate(self.ships):
+                ship.render(self.viewport)
+                path = Spline(ship,self.planets)
+                splinePoints = path.get_prediction(30)
+                for RenderablePoint in splinePoints:
+                    RenderablePoint.render(self.viewport)
+                    sprites.add(RenderablePoint)
+                sprites.add(ship)
+            for slug in self.slugs:
+                slug.render(self.viewport)
+                sprites.add(slug)
+            for planet in self.planets:
+                planet.render(self.viewport)
+                sprites.add(planet)
+            sprites.draw(self.screen)
 
     def updateShips(self):
         for client in self.clients:
