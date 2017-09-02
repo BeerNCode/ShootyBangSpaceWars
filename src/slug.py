@@ -8,10 +8,12 @@ WHITE = (255, 255, 255)
 class Slug(Thing):
     """ Slugs Motherfuckers """
 
-    def __init__(self):
+    def __init__(self, pos, vel):
         """ Construcz """
         Thing.__init__(self)
-        self.original_image = pygame.image.load("LaserShot.png").convert()
+        self.pos = pos
+        self.vel = vel
+        self.original_image = pygame.image.load("../LaserShot.png").convert()
         self.original_image.set_colorkey(WHITE)
         self.image = self.original_image
         self.rect = self.image.get_rect()

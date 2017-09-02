@@ -1,5 +1,6 @@
 from vector import Vector 
 from thing import Thing
+from slug import Slug
 import math
 import pygame
 
@@ -19,11 +20,12 @@ class Ship(Thing):
 
     def update(self):
         firing = False
+        b = None
         keys=pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
-            self.rvel -= 0.1
+            self.rvel -= 0.01
         if keys[pygame.K_RIGHT]:
-            self.rvel += 0.1
+            self.rvel += 0.01
         if keys[pygame.K_UP]:
             thrust = Vector.fromAngle(self.rpos).mult(10)
             self.addForce(thrust)
@@ -31,3 +33,4 @@ class Ship(Thing):
             b = Slug(self.pos,self.vel)
             firing = True
         super().update()
+        return b
