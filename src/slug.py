@@ -12,6 +12,7 @@ class Slug(Thing):
         """ Construcz """
         print("A bullitz voz made")
         Thing.__init__(self)
+        self.life = 1000
         self.pos = pos
         self.vel = vel
         self.rpos = rpos
@@ -23,4 +24,5 @@ class Slug(Thing):
         self.rect = self.image.get_rect()
 
     def update(self):
+        self.life -= 1
         super().update()
