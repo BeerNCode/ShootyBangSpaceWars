@@ -110,9 +110,10 @@ class Program:
 
                 pygame.display.flip()
             except Exception:
+                self.running = false
                 exc_type, exc_value, exc_traceback = sys.exc_info()
                 traceback.print_exception(exc_type, exc_value, exc_traceback)
-                stdin.readline()
+                return
             self.frames+=1
             self.clock.tick(Program.GAME_SPEED)
 
@@ -163,13 +164,13 @@ class Program:
                 data = Program.sendJSON(client.conn, data)
             except:
                 print("Ouch :/")
-                stdin.readline()
 
     def listenToClient(self, client):
         print("SERVER: Listneing to clint")
         while self.running:
             data = Program.readJSON(client.conn)
-            if not data == None:
+            if not data is None:
+                print(data)
                 decoded_data = json.JSONDecoder().decode(data)
                 client.keys = decoded_data
 
@@ -194,8 +195,7 @@ class Program:
             lb = l.to_bytes(4, byteorder='big', signed=False)
             socket.send(lb+db)
         except:
-            print("Failed connection")
-            stdin.readline()
+            print("Failed send action")
 
     @staticmethod
     def readJSON(socket):
@@ -205,8 +205,7 @@ class Program:
             data = socket.recv(l).decode("utf-8")
             return data
         except:
-            print("Failed connection")
-            stdin.readline()
+            print("Failed read action")
 
     def sendServerUpdate(self):
         """ Send packets from client to server """

@@ -101,4 +101,4 @@ class Controls():
         self.space = space
 
     def toJSON(self):
-        return {"up":self.up, "down":self.down, "left":self.left, "right":self.right, "space":self.space}
+        return json.JSONEncoder().encode({"up":self.up, "down":self.down, "left":self.left, "right":self.right, "space":self.space})
