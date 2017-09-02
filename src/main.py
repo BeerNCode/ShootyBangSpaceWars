@@ -30,11 +30,11 @@ x = 0
 done = False
 
 planets = []
-for i in range(0,10):
-    planets.append(Planet(random.random()*100+20, 1000, Vector(random.random()*SCREEN_WIDTH, random.random()*SCREEN_HEIGHT)))
+for i in range(0,2):
+    planets.append(Planet(random.random()*1000+100, 1000, Vector(random.random()*SCREEN_WIDTH, random.random()*SCREEN_HEIGHT)))
 
 ships = []
-bullets = []
+slugs = []
 ship = Ship()
 ships.append(ship)
 
@@ -55,14 +55,15 @@ while not done:
     for ship in ships:
         ship.update_gravity(planets)
         ship.update()
-        newBullets = ship.update()
-        if newBullets:
-            for bullet in newBullets:
-                bullets.append(bullet)
+        newSlugs = ship.update()
+        for slug in newSlugs:
+            slugs.append(slug)
         pygame.draw.line(screen, GREEN, [ship.pos.x, ship.pos.y], [ship.pos.x+math.cos(ship.rpos)*100, ship.pos.y+math.sin(ship.rpos)*100])
         sprites.add(ship)
-    for bullet in bullets:
-        sprites.add(bullet)
+
+    for slug in slugs:
+        slug.update()
+        sprites.add(slug)
 
     for planet in planets:
         planet.show(screen)

@@ -6,8 +6,18 @@
 ## brightness
 ## etc
 
-def load(filePath):
-    f = open(filePath, 'r')
     
 
 
+
+# class Map():
+
+#     def __init__(self, width, height):
+#         self.width = width
+#         self.height = height
+
+#     @staticmethod
+#     def load(filePath):
+#         f = open(filePath, 'r')
+
+#         m = Map(1000, 1000)
