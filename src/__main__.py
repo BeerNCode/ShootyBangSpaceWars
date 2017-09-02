@@ -35,7 +35,7 @@ class Program:
     SCREEN_WIDTH = 1024
     SCREEN_HEIGHT = 768
     GAME_SPEED = 30
-    HOST = "localhost"
+    HOST = "192.168.1.245"
     PORT = 15007
 
     pygame.display.set_caption("Shooty Bang Space Wars")
