@@ -31,6 +31,9 @@ class Program:
 
     SCREEN_WIDTH = 1024
     SCREEN_HEIGHT = 768
+    GAME_SPEED = 1
+    HOST = "localhost"
+    PORT = 15007
 
     pygame.display.set_caption("Shooty Bang Space Wars")
 
@@ -50,6 +53,7 @@ class Program:
         self.frames = 0
         self.map_limits = Limits(Vector(0, 0), Vector(5000, 5000))
         self.running = True
+        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         
         if self.server:
             self.loadMap()
@@ -57,7 +61,6 @@ class Program:
             self.newClientsThread = Thread(target=self.listenForNewClients)
             self.newClientsThread.start()
         else:
-            self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.listenThread = Thread(target=self.listenToServer)
             self.listenThread.start()
             self.player = Ship()
@@ -73,11 +76,13 @@ class Program:
 
     def run(self):
         while self.running:
-
             print("Step: "+str(self.frames))
-            self.updateEvents()    
+            self.updateEvents()
             if not self.running:
                 break
+            
+            if (self.server):
+                self.updateClients()
             self.updateShips()
             self.updateSlugs()
             self.render()
@@ -88,33 +93,30 @@ class Program:
 
             pygame.display.flip()
             self.frames+=1
-            self.clock.tick(30)
+            self.clock.tick(Program.GAME_SPEED)
         pygame.quit()
 
     def listenToServer(self):
         """ Listens to the server for updates to the world """
+        print("CLIENT: Listening to server for updates")
+        self.socket.connect((Program.HOST, Program.PORT))
         while True:
-            data = self.sock.recv()
-            print('Received:', str(repr(data)))
-            # Update the model with other
-            # add new ships
-            # update positions
-            # 
+            data = self.socket.recv(1024)
+            if not data == None:
+                print('Received data from SERVER:', str(data.decode("utf-8")))
 
     def listenForNewClients(self):
+        self.socket.bind((Program.HOST, Program.PORT))
+        self.socket.listen(5)
         while True:
             conn, addr = self.socket.accept()
-            clients.append(Client(conn, addr))
-            print("Connection from [",addr,"]")
-            while True:
-                data = conn.recv(1024)
-                if not data: 
-                    break
+            self.clients.append(Client(conn, addr))
+            print("Just had a connection from [",addr,"]")
 
     def updateClients(self):
         """ Send packets to the clients """
-        # for client in self.clients:
-
+        for client in self.clients:
+            print("Pretending to send a packet to client BOOP")
 
     def updateEvents(self):
         for event in pygame.event.get():
