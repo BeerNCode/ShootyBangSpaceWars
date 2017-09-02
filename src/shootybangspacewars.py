@@ -2,7 +2,8 @@ import pygame
 from pygame.locals import*
 import os
 import subprocess
-img = pygame.image.load('..\\img\\MenuBackdropWithButtons.png')
+import time
+img = pygame.image.load('..' + os.sep + 'img' + os.sep +  'MenuBackdropWithButtons.png')
 
 
 screen = pygame.display.set_mode((img.get_width(), img.get_height()))
@@ -29,3 +30,6 @@ while running:
 				#join
                 p = subprocess.Popen([baseCommand, '__main__.py'])
                 quit()
+        if event.type == pygame.QUIT:
+                quit()
+    time.sleep(.1);

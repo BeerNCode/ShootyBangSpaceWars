@@ -1,5 +1,7 @@
 import pygame
 from sounds import Sounds, Sound
+import getpass
+
 
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
@@ -9,6 +11,7 @@ RED = (255, 0, 0)
 MAP_WIDTH  = 5000
 MAP_HEIGHT = 5000
 
+uname = getpass.getuser()
 
 class Fonts:
     pygame.font.init()
