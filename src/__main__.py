@@ -14,31 +14,32 @@ from damage import Damage
 from slug import Slug
 from limits import Limits
 
+pygame.init()
+
+class Colours:
+    BLACK = (0, 0, 0)
+    WHITE = (255, 255, 255)
+    GREEN = (0, 255, 0)
+    RED = (255, 0, 0)
+
+class Fonts:
+    TITLE = pygame.font.SysFont('Calibri', 25, True, False)
 
 class Program:
+
     SCREEN_WIDTH = 1024
     SCREEN_HEIGHT = 768
 
-    class Colours:
-        BLACK = (0, 0, 0)
-        WHITE = (255, 255, 255)
-        GREEN = (0, 255, 0)
-        RED = (255, 0, 0)
-
-    class Fonts:
-        TITLE = pygame.font.SysFont('Calibri', 25, True, False)
-
-    pygame.init()
     pygame.display.set_caption("Shooty Bang Space Wars")
-    clock = pygame.time.Clock()
-    size = (SCREEN_WIDTH, SCREEN_HEIGHT)
-    screen = pygame.display.set_mode(size, pygame.RESIZABLE)
 
     def __init__(self, server):
         if server:
             print("Running in SERVER mode")
         else:
             print("Running in CLIENT mode")
+        self.clock = pygame.time.Clock()
+        size = (Program.SCREEN_WIDTH, Program.SCREEN_HEIGHT)
+        self.screen = pygame.display.set_mode(size, pygame.RESIZABLE)
         self.server = server
         self.ships = []
         self.slugs = []
@@ -61,7 +62,7 @@ class Program:
             # Need to get the map from the server
     def loadMap(self):
             for iq in range(0,3):
-                self.planets.append(Planet(random.random()*100+50, 400, Vector(random.random()*SCREEN_WIDTH, random.random()*SCREEN_HEIGHT)))
+                self.planets.append(Planet(random.random()*100+50, 400, Vector(random.random()*Program.SCREEN_WIDTH, random.random()*Program.SCREEN_HEIGHT)))
 
     def run(self):
         while self.running:
@@ -75,12 +76,12 @@ class Program:
             self.render()
             
             if not self.server:
-                screen.blit(TITLE.render(str(self.frames), True, WHITE), [SCREEN_WIDTH-100, 10])
-                screen.blit(TITLE.render(str(self.player.damage), True, WHITE), [SCREEN_WIDTH-100, 20])
+                self.screen.blit(Fonts.TITLE.render(str(self.frames), True, Colours.WHITE), [Program.SCREEN_WIDTH-100, 10])
+                self.screen.blit(Fonts.TITLE.render(str(self.player.damage), True, Colours.WHITE), [Program.SCREEN_WIDTH-100, 20])
 
             pygame.display.flip()
             self.frames+=1
-            clock.tick(30)
+            self.clock.tick(30)
         pygame.quit()
 
     def listenToServer(self):
@@ -113,27 +114,27 @@ class Program:
             if event.type == pygame.QUIT:
                 print("Quitting the game")
                 self.running = False
-                screen.fill(WHITE)
+                self.screen.fill(Colours.WHITE)
             if event.type == pygame.VIDEORESIZE:
-                screen = pygame.display.set_mode((event.w, event.h),
+                self.screen = pygame.display.set_mode((event.w, event.h),
                                                   pygame.RESIZABLE) 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     done = True
-                    screen.fill(WHITE)
+                    self.screen.fill(Colours.WHITE)
 
     def render(self):
-        screen.fill(BLACK)
+        self.screen.fill(Colours.BLACK)
         sprites = pygame.sprite.Group()
         for ship in self.ships:
-            ship.show(screen)
+            ship.show(self.screen)
             sprites.add(ship)
         for slug in self.slugs:
             sprites.add(slug)
         for planet in self.planets:
             planet.update()
             sprites.add(planet)
-        sprites.draw(screen)
+        sprites.draw(self.screen)
 
     def updateShips(self):
         for ship in self.ships:
