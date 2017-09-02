@@ -23,6 +23,7 @@ class Colours:
     RED = (255, 0, 0)
 
 class Fonts:
+    pygame.font.init()
     TITLE = pygame.font.SysFont('Calibri', 25, True, False)
 
 class Program:
