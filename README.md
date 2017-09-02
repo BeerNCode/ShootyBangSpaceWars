@@ -111,3 +111,38 @@ menu controls
   - Nitro - Gives an extra boost on thrusters in a forward direction
   - repair bots - repairs damage over time.
 - gravitational pull
+
+
+# Dev
+
+## Packet format
+
+- Map
+	- Planets[]
+		- pos
+			- x (double)
+			- y (double)
+		- mass (double)
+		- radius (double)
+		- type (e.g. SUN, MARS, EARTH) (string)
+
+- State
+	- Ships[]
+		- pos
+			- x (double)
+			- y (double)
+			- angle (double)
+		- id (string)
+		- energy (double)
+		- damage (double)
+	- Bullets[]
+		-pos
+			- x (double)
+			- y (double)
+			- angle (double)
+
+- Controls
+	- right (bool)
+	- left (bool)
+	- forward (bool)
+	- shoot (bool)

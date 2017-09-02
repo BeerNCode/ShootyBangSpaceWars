@@ -59,10 +59,9 @@ class Program:
             self.player = Ship()
             self.ships.append(self.player)
             # Need to get the map from the server
-
     def loadMap(self):
-        for iq in range(0,3):
-            self.planets.append(Planet(20, 400, Vector(random.random()*SCREEN_WIDTH, random.random()*SCREEN_HEIGHT)))
+            for iq in range(0,3):
+                self.planets.append(Planet(random.random()*100+50, 400, Vector(random.random()*SCREEN_WIDTH, random.random()*SCREEN_HEIGHT)))
 
     def run(self):
         while self.running:
@@ -150,6 +149,8 @@ class Program:
             slug.update_gravity(self.planets)
             if not self.map_limits.contains(slug.pos):
                 self.slugs.remove(slug)
+            for planet in self.planets:
+                Damage.determineThingPlanetDamage(slug, planet)
             for planet in self.planets:
                 vec = slug.pos.sub(planet.pos)
                 mag = vec.mag()
