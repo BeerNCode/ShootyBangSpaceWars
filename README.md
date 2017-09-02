@@ -109,4 +109,5 @@ menu controls
   - Mines - Drop and leave on map
   - Rockets - Avoids Shields
   - Nitro - Gives an extra boost on thrusters in a forward direction
+  - repair bots - repairs damage over time.
 - gravitational pull
