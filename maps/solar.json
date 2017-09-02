@@ -1,0 +1,23 @@
+[
+  {
+    "pos": {
+      "x": 0,
+      "y": 0,
+      "angle": 0
+    },
+    "mass": 100,
+    "radius": 150,
+    "type": "SUN"
+  },
+  {
+    "pos": {
+      "x": 200,
+      "y": 0,
+      "angle": 0
+    },
+    "mass": 10,
+    "radius": 50,
+    "type": "EARTH"
+  }
+
+]

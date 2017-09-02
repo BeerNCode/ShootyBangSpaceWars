@@ -78,6 +78,10 @@
     <Content Include="img\Turret Blast.png">
       <Publish>True</Publish>
     </Content>
+    <Content Include="maps\solar.json">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\globals.py">
@@ -86,6 +90,9 @@
     <Compile Include="src\damage.py" />
     <Compile Include="src\limits.py" />
     <Compile Include="src\map.py" />
+    <Compile Include="src\packets.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="src\planet.py" />
     <Compile Include="src\ship.py" />
     <Compile Include="src\slug.py" />
@@ -99,6 +106,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="img" />
+    <Folder Include="maps\" />
     <Folder Include="src" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
