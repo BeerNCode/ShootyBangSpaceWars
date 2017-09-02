@@ -9,7 +9,7 @@ class Thing(pygame.sprite.Sprite):
     def __init__(self):
         """Construcz"""
         super().__init__()
-        self.pos = Vector(50, 50)
+        self.pos = Vector(0, 0)
         self.vel = Vector(0, 0)
         self.rpos = 0
         self.rvel = 0

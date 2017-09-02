@@ -1,10 +1,15 @@
-
+import json
 import pygame
 import time
 import math
 import random
 import sys
 import socket
+import traceback
+from client import Client
+from threading import Thread
+from ship import Ship
+from planet import Planet
 from client import Client
 from threading import Thread
 from ship import Ship
@@ -16,6 +21,9 @@ from time import sleep
 from damage import Damage
 from slug import Slug
 from limits import Limits
+import packets
+from spline import Spline
+from lightSource import LightSource
 from viewport import Viewport
 import globals
 
@@ -47,8 +55,8 @@ class Program:
         self.slugs = []
         self.planets = []
         self.lightSources = []
-        self.frames = 0
         self.map_limits = Limits(Vector(0, 0), Vector(globals.MAP_WIDTH, globals.MAP_HEIGHT))
+        self.frames = 0
         self.running = True
         self.viewport = Viewport(Vector(self.SCREEN_WIDTH/2, self.SCREEN_HEIGHT/2), self.SCREEN_WIDTH, self.SCREEN_HEIGHT)
         globals.MAP_WIDTH = self.SCREEN_WIDTH
@@ -70,7 +78,7 @@ class Program:
             for iq in range(0,3):
                 self.planets.append(Planet(random.random()*100+50, 400, Vector(random.random()*globals.MAP_WIDTH, random.random()*globals.MAP_HEIGHT)))
             self.lightSources.append(LightSource(Vector(300,300),1000))
-            # Need to get the map from the server
+
     def loadMap(self):
             for iq in range(0,3):
                 self.planets.append(Planet(random.random()*100+50, 400, Vector(random.random()*globals.MAP_WIDTH, random.random()*globals.MAP_HEIGHT)))
@@ -78,47 +86,132 @@ class Program:
 
     def run(self):
         while self.running:
-            print("Step: "+str(self.frames))
+            # if self.server:
+            #     print("SERVER: "+str(self.frames))
+            # else:
+            #     print("CLIENT: "+str(self.frames))
+            try:
             self.updateEvents()
             if not self.running:
+                    print("No more looping..")
                 break
             
-            if (self.server):
-                self.updateClients()
+                if self.server:
             self.updateShips()
             self.updateSlugs()
+                    self.sendClientsUpdate()
+                else:
+                    self.sendServerUpdate()
+
             self.render()
             
             if not self.server:
-                self.screen.blit(globals.Fonts.TITLE.render(str(self.frames), True, globals.WHITE), [self.SCREEN_WIDTH-100, 10])
-                self.screen.blit(globals.Fonts.TITLE.render(str(self.player.damage), True, globals.WHITE), [self.SCREEN_WIDTH-100, 40])
+                    self.screen.blit(globals.Fonts.TITLE.render(str(self.frames), True, Colours.WHITE), [Program.SCREEN_WIDTH-100, 10])
+                    self.screen.blit(globals.Fonts.TITLE.render(str(self.player.damage), True, Colours.WHITE), [Program.SCREEN_WIDTH-100, 20])
 
             pygame.display.flip()
+            except Exception:
+                exc_type, exc_value, exc_traceback = sys.exc_info()
+                traceback.print_exception(exc_type, exc_value, exc_traceback)
+                return
             self.frames+=1
             self.clock.tick(Program.GAME_SPEED)
-        pygame.quit()
 
     def listenToServer(self):
         """ Listens to the server for updates to the world """
-        print("CLIENT: Listening to server for updates")
+        print("Listening to server for updates")
         self.socket.connect((Program.HOST, Program.PORT))
-        while True:
-            data = self.socket.recv(1024)
+        while self.running:
+            data = Program.readJSON(self.socket)
             if not data == None:
-                print('Received data from SERVER:', str(data.decode("utf-8")))
+                decoded_data = json.JSONDecoder().decode(data)
+                if decoded_data["type"] == "map":
+                    self.planets.clear()
+                    for jjplanet in decoded_data["planets"]:
+                        jplanet = json.JSONDecoder().decode(jjplanet)
+                        print("planet", type(jplanet))
+                        self.planets.append(Planet(jplanet["radius"], jplanet["mass"], jplanet["pos"]))
+                elif decoded_data["type"] == "update":
+                    print("Update recieved from server.")
+                    jships = decoded_data["ships"]
+                    newShips = []
+                    for jship in jships:
+                        ship = next((s for s in self.ships if s.name == jship.name), None)
+                        if ship is None:
+                            ship = Ship()# add info
+                            self.ships.append(ship)
+                        else:
+                            #update info
+                            ship.pos.x = 0
+                    self.ships = newShips
 
     def listenForNewClients(self):
         self.socket.bind((Program.HOST, Program.PORT))
         self.socket.listen(5)
-        while True:
-            conn, addr = self.socket.accept()
-            self.clients.append(Client(conn, addr))
-            print("Just had a connection from [",addr,"]")
 
-    def updateClients(self):
+        while self.running:
+            conn, addr = self.socket.accept()
+            ship = Ship()
+            ship.pos = Vector(random.random()*1000, random.random()*1000)
+            self.ships.append(ship)
+            client = Client(conn, addr, ship)
+            client.listenThread = Thread(target=self.listenToClient, args=(client,))
+            client.listenThread.start()
+            self.clients.append(client)
+
+            print("Just had a connection from [",addr,"]")
+            data = packets.Map.toJSON(packets.Map.toPacket(self.planets))
+            try:
+                data = Program.sendJSON(client.conn, data)
+            except:
+                print("Ouch :/")
+
+    def listenToClient(self, client):
+        print("SERVER: Listneing to clint")
+        while self.running:
+            data = Program.readJSON(client.conn)
+            if not data == None:
+                decoded_data = json.JSONDecoder().decode(data)
+                client.keys = decoded_data
+
+    def sendClientsUpdate(self):
         """ Send packets to the clients """
+        packet_ships = []
+        for ship in self.ships:
+            packet_ships.append(packets.Ship.toPacket(ship))
+        packet_slugs = []
+        for slug in self.slugs:
+            packet_slugs.append(packets.Slug.toPacket(slug))
+        state = packets.State(packet_ships, packet_slugs)
+        data = state.toJSON()
         for client in self.clients:
-            print("Pretending to send a packet to client BOOP")
+            Program.sendJSON(client.conn, data)
+
+    @staticmethod
+    def sendJSON(socket, data):
+        try:
+            db = bytes(data, "utf-8")
+            l = len(db)
+            lb = l.to_bytes(4, byteorder='big', signed=False)
+            socket.send(lb+db)
+        except:
+            print("Failed connection")
+
+    @staticmethod
+    def readJSON(socket):
+        try:
+            lb = socket.recv(4)
+            l = int.from_bytes(lb, byteorder='big', signed=False)
+            data = socket.recv(l).decode("utf-8")
+            return data
+        except:
+            print("Failed connection")
+
+    def sendServerUpdate(self):
+        """ Send packets from client to server """
+        keys = self.player.getInputs()
+        data = keys.toJSON()
+        Program.sendJSON(self.socket, data)
 
     def updateEvents(self):
         for event in pygame.event.get():
@@ -137,6 +230,7 @@ class Program:
     def render(self):
         self.screen.fill(globals.BLACK)
         sprites = pygame.sprite.Group()
+        if not self.server:
         self.viewport.updateMidPoint(self.player.pos)
         for idx, ship in enumerate(self.ships):
             ship.render(self.viewport)
@@ -156,7 +250,9 @@ class Program:
         sprites.draw(self.screen)
 
     def updateShips(self):
-        for ship in self.ships:
+        for client in self.clients:
+            ship = client.ship
+            ship.setInputs(client.keys)
             ship.update_gravity(self.planets)
             ship.update_regen(self.lightSources)
             for planet in self.planets:
@@ -186,3 +282,6 @@ if __name__ == "__main__":
         server = False
     p = Program(server)
     p.run()
+
+pygame.quit()
+print("DONE AND DUSTED")

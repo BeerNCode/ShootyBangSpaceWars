@@ -4,67 +4,101 @@ import random
 
 class Map():
 
-class State():
-    def __init__(self, ships, bullets):
-        self.ships = ships
-        self.bullets = bullets
-        
-class Ship():
+    def __init__(self, planets):
+        self.planets = planets
 
     @staticmethod
-    def toPacket(ship):
-        pos = Position.toPacket(ship.pos.x,ship.pos.y, ship.rpos)
-        vel = Position.toPacket(ship.vel.x,ship.vel.y, 0)
-        id = "a"
-        energy = ship.energy
-        damage = ship.hull
-        return Ship(pos,vel,id,energy,damage)
+    def toPacket(planets):
+        packagePlanets = []
+        for planet in planets:
+            packagePlanets.append(Planet.toPacket(planet))
+        return Map(packagePlanets)
 
-    def __init__(self, pos, vel, id, energy, damage):
+    def toJSON(self):
+        jplanets = []
+        for planet in self.planets:
+            jplanets.append(planet.toJSON())
+        return json.JSONEncoder().encode({"type":"map","planets":jplanets})
+
+class State():
+    def __init__(self, ships, slugs):
+        self.ships = ships
+        self.slugs = slugs
+        
+    def toJSON(self):
+        jships = []
+        for ship in self.ships:
+            jships.append(ship.toJSON())
+        jslugs = []
+        for slug in self.slugs:
+            jslugs.append(slug.toJSON())
+        return json.JSONEncoder().encode({"type":"update","ships":jships, "slugs":jslugs})
+
+class Ship():
+    def __init__(self, pos, vel, name, energy, damage):
          self.pos = pos
          self.vel = vel
-         self.id = id
+         self.name = name
          self.energy = energy
          self.damage = damage
 
-class Bullet():
+    def toJSON(self):
+        return {"pos":self.pos.toJSON(),"vel":self.vel.toJSON(),"name":self.name,"energy":self.energy,"damage":self.damage}
+
+    @staticmethod
+    def toPacket(ship):
+        name = "a"
+        pos = Position.toPacket(ship.pos, ship.rpos)
+        vel = Position.toPacket(ship.vel, 0)
+        energy = ship.energy
+        damage = ship.hull
+        return Ship(pos,vel,name,energy,damage)
+
+
+class Slug():
+    def __init__(self, pos, vel):
+         self.pos = pos
+         self.vel = vel
 
     @staticmethod
     def toPacket(slug):
         return Bullet(Position.toPacket(slug.pos,slug.rpos),Position.toPacket(slug.vel,0))
 
-    def __init__(self, pos, vel):
-         self.pos = pos
-         self.vel = vel
-
-
 class Position():
-
-    @staticmethod
-    def toPacket(pos,rpos):
-        return Position(pos.x,pos.y,pos.rpos)
-
     def __init__(self, x, y, angle):
          self.x = x
          self.y = y
          self.angle = angle
 
-class Planet():
+    def toJSON(self):
+        return {"x":self.x,"y":self.y,"r":self.angle}
 
     @staticmethod
-    def toPacket(planet):
-        pos = Position(planet.pos.x,planet.pos.y,0)
-        return Planet(pos,planet.mass,planet.radius,planet.type)
+    def toPacket(pos,rpos):
+        return Position(pos.x,pos.y,rpos)
 
+class Planet():
     def __init__(self,pos,mass,radius,type):
         self.pos = pos
         self.mass = mass
         self.radius = radius
         self.type = type
 
+    def toJSON(self):
+        return {"pos":self.pos.toJSON(),"mass":self.mass,"radius":self.radius,"type":self.type}
+
+    @staticmethod
+    def toPacket(planet):
+        pos = Position(planet.pos.x,planet.pos.y,0)
+        return Planet(pos,planet.mass,planet.radius,planet.type)
+
 class Controls():
-    def __init__(self, left=False, right=False, forward=False, shoot=False):
+    def __init__(self, left=False, right=False, up=False, down=False, space=False):
         self.left = left
         self.right = right
-        self.forward = forward
-        self.shoot = shoot
+        self.up = up
+        self.down = down
+        self.space = space
+
+    def toJSON(self):
+        return {"up":self.up, "down":self.down, "left":self.left, "right":self.right, "space":self.space}
