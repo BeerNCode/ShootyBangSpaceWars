@@ -15,7 +15,10 @@ class Map():
         return Map(packagePlanets)
 
     def toJSON(self):
-        return json.JSONEncoder().encode(self)
+        jplanets = []
+        for planet in self.planets:
+            jplanets.append(planet.toJSON())
+        return json.JSONEncoder().encode({"type":"map","planets":jplanets})
 
 class State():
     def __init__(self, ships, slugs):
@@ -29,31 +32,30 @@ class State():
         jslugs = []
         for slug in self.slugs:
             jslugs.append(slug.toJSON())
-        return json.JSONEncoder().encode({"ships":jships, "slugs":jslugs})
+        return json.JSONEncoder().encode({"type":"update","ships":jships, "slugs":jslugs})
 
 class Ship():
-    def __init__(self, pos, vel, id, energy, damage):
+    def __init__(self, pos, vel, name, energy, damage):
          self.pos = pos
          self.vel = vel
-         self.id = id
+         self.name = name
          self.energy = energy
          self.damage = damage
 
     def toJSON(self):
-        return json.JSONEncoder().encode(self)
+        return {"pos":self.pos.toJSON(),"vel":self.vel.toJSON(),"name":self.name,"energy":self.energy,"damage":self.damage}
 
     @staticmethod
     def toPacket(ship):
-        id = "a"
-        pos = Position.toPacket(ship.pos.x,ship.pos.y, ship.rpos)
-        vel = Position.toPacket(ship.vel.x,ship.vel.y, 0)
+        name = "a"
+        pos = Position.toPacket(ship.pos, ship.rpos)
+        vel = Position.toPacket(ship.vel, 0)
         energy = ship.energy
         damage = ship.hull
-        return Ship(pos,vel,id,energy,damage)
+        return Ship(pos,vel,name,energy,damage)
 
 
 class Slug():
-
     def __init__(self, pos, vel):
          self.pos = pos
          self.vel = vel
@@ -68,17 +70,22 @@ class Position():
          self.y = y
          self.angle = angle
 
+    def toJSON(self):
+        return {"x":self.x,"y":self.y,"r":self.angle}
+
     @staticmethod
     def toPacket(pos,rpos):
-        return Position(pos.x,pos.y,pos.rpos)
+        return Position(pos.x,pos.y,rpos)
 
 class Planet():
-
     def __init__(self,pos,mass,radius,type):
         self.pos = pos
         self.mass = mass
         self.radius = radius
         self.type = type
+
+    def toJSON(self):
+        return {"pos":self.pos.toJSON(),"mass":self.mass,"radius":self.radius,"type":self.type}
 
     @staticmethod
     def toPacket(planet):
@@ -86,8 +93,12 @@ class Planet():
         return Planet(pos,planet.mass,planet.radius,planet.type)
 
 class Controls():
-    def __init__(self, left=False, right=False, forward=False, shoot=False):
+    def __init__(self, left=False, right=False, up=False, down=False, space=False):
         self.left = left
         self.right = right
-        self.forward = forward
-        self.shoot = shoot
+        self.up = up
+        self.down = down
+        self.space = space
+
+    def toJSON(self):
+        return {"up":self.up, "down":self.down, "left":self.left, "right":self.right, "space":self.space}
