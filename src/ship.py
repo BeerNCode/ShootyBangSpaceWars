@@ -75,6 +75,11 @@ class Ship(Thing):
     def getInputs(self):
         keys = pygame.key.get_pressed()
         keys_packet = packets.Controls()
+        self.key_up = False
+        self.key_down = False
+        self.key_left = False
+        self.key_right = False
+        self.key_space = False
         if keys[pygame.K_UP]:
             self.key_up = True
             keys_packet.up = True

@@ -37,7 +37,7 @@ class Program:
     SCREEN_WIDTH = 1024
     SCREEN_HEIGHT = 768
     GAME_SPEED = 30
-    HOST = "localhost"
+    HOST = "192.168.1.200"
     PORT = 15007
 
 
@@ -152,15 +152,15 @@ class Program:
     def listenForNewClients(self):
         self.socket.bind(("localhost", Program.PORT))
         self.socket.listen(5)
-
+        self.socket.settimeout(1000)
         while self.running:
-            self.socket.settimeout(1000)
             conn, addr = self.socket.accept()
             ship = Ship()
             ship.name = addr           
             ship.pos = Vector(random.random()*1000, random.random()*1000)
             self.ships.append(ship)
             client = Client(conn, addr, ship)
+            client.conn.settimeout(1000)
             client.listenThread = Thread(target=self.listenToClient, args=(client,))
             client.listenThread.start()
             self.clients.append(client)
@@ -291,4 +291,10 @@ if __name__ == "__main__":
     p.run()
 
 pygame.quit()
+# if p.server:
+#     p.newClientsThread.kill()
+#     for client in p.clients:
+#         client.listenThread.kill()
+# else:
+#     p.listenThread.kill()
 print("DONE AND DUSTED")
