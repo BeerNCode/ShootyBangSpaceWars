@@ -30,6 +30,8 @@ import globals
 
 pygame.init()
 
+DEBUG = False
+
 class Program:
 
     SCREEN_WIDTH = 1024
@@ -117,7 +119,7 @@ class Program:
         print("Connecting...")
         self.socket.connect((Program.HOST, Program.PORT))
         ss = self.socket.getsockname()
-        print("Listening to server for updates:"+ss[0])
+        print("Listening to server for updates: ["+str(ss[0])+"]")
         self.player.name = str(ss[0])
         print("Setting ship name to :"+self.player.name)
         self.ships.append(self.player)
@@ -129,8 +131,8 @@ class Program:
                 if decoded_data["type"] == "map":
                     self.planets.clear()
                     for jplanet in decoded_data["planets"]:
-                        p = Vector(jplanet["pos"]["x"], jplanet["pos"]["y"])
-                        self.planets.append(Planet(jplanet["radius"], jplanet["mass"],p, jplanet["type"]))
+                        jpos = Vector(jplanet["pos"]["x"], jplanet["pos"]["y"])
+                        self.planets.append(Planet(jplanet["radius"], jplanet["mass"],jpos, jplanet["type"]))
                 elif decoded_data["type"] == "update":
                     print("Update recieved from server.")
                     jships = decoded_data["ships"]
@@ -138,7 +140,7 @@ class Program:
                     for jship in jships:
                         ship = next((s for s in self.ships if s.name == jship["name"]), None)
                         if ship is None:
-                            ship = Ship()# add info
+                            ship = Ship()
                             ship.name = jship['name']
                         else:
                             ship.pos.x = jship['pos']['x']
@@ -152,6 +154,7 @@ class Program:
         self.socket.listen(5)
 
         while self.running:
+            self.socket.settimeout(1000)
             conn, addr = self.socket.accept()
             ship = Ship()
             ship.name = addr           
@@ -171,7 +174,8 @@ class Program:
         while self.running:
             data = Program.readJSON(client.conn)
             if not data is None:
-                print(data)
+                if DEBUG:
+                    print(data)
                 decoded_data = json.JSONDecoder().decode(data)
                 client.keys = decoded_data
 
@@ -196,7 +200,8 @@ class Program:
             lb = l.to_bytes(4, byteorder='big', signed=False)
             socket.send(lb+db)
         except:
-            print("Failed send action")
+            if DEBUG:
+                print("Failed send action")
 
     @staticmethod
     def readJSON(socket):
@@ -206,7 +211,8 @@ class Program:
             data = socket.recv(l).decode("utf-8")
             return data
         except:
-            print("Failed read action")
+            if DEBUG:
+                print("Failed read action")
 
     def sendServerUpdate(self):
         """ Send packets from client to server """
