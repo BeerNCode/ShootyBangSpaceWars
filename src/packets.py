@@ -90,7 +90,7 @@ class Planet():
     @staticmethod
     def toPacket(planet):
         pos = Position(planet.pos.x,planet.pos.y,0)
-        return Planet(pos,planet.mass,planet.radius,planet.type)
+        return Planet(pos,planet.mass,planet.radius,planet.ptype)
 
 class Controls():
     def __init__(self, left=False, right=False, up=False, down=False, space=False):
