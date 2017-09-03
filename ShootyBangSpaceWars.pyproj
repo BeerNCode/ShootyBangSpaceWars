@@ -12,12 +12,13 @@
     <OutputPath>.</OutputPath>
     <ProjectTypeGuids>{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
-    <InterpreterId />
+    <InterpreterId>Global|PythonCore|3.6-32</InterpreterId>
     <IsWindowsApplication>False</IsWindowsApplication>
     <InterpreterArguments>
     </InterpreterArguments>
     <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
-    <CommandLineArguments>server</CommandLineArguments>
+    <CommandLineArguments>
+    </CommandLineArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
@@ -100,6 +101,9 @@
     <Compile Include="src\damage.py" />
     <Compile Include="src\limits.py" />
     <Compile Include="src\map.py" />
+    <Compile Include="src\networking.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="src\packets.py">
       <SubType>Code</SubType>
     </Compile>
@@ -125,6 +129,9 @@
     <Folder Include="maps\" />
     <Folder Include="snd\" />
     <Folder Include="src" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="Global|PythonCore|3.6-32" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
 </Project>
