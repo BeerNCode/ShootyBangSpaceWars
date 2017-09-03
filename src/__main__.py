@@ -62,6 +62,7 @@ class Program:
         self.map_limits = Limits(Vector(0, 0), Vector(globals.MAP_WIDTH, globals.MAP_HEIGHT))
         self.frames = 0
         self.running = True
+        self.connected = False
         self.viewport = Viewport(Vector(self.SCREEN_WIDTH/2, self.SCREEN_HEIGHT/2), self.SCREEN_WIDTH, self.SCREEN_HEIGHT)
         globals.MAP_WIDTH = self.SCREEN_WIDTH
         globals.MAP_HEIGHT = self.SCREEN_HEIGHT
@@ -116,7 +117,14 @@ class Program:
     def listenToServer(self):
         """ Listens to the server for updates to the world """
         print("Connecting...")
+        # attempts = 0
+        # while self.running:
+        #     try:
+        #         print("Trying to connect...("+attempts+" attempt)")
         self.socket.connect((Program.HOST, Program.PORT))
+        #         break
+        #     except:
+        #         attempts+=1
         ss = self.socket.getsockname()
         print("Listening to server for updates: ["+str(ss[0])+"]")
         self.player.name = str(ss[0])
@@ -124,30 +132,33 @@ class Program:
         self.ships.append(self.player)
 
         while self.running:
-            data = Program.readJSON(self.socket)
-            if not data == None:
-                decoded_data = json.JSONDecoder().decode(data)
-                if decoded_data["type"] == "map":
-                    self.planets.clear()
-                    for jplanet in decoded_data["planets"]:
-                        jpos = Vector(jplanet["pos"]["x"], jplanet["pos"]["y"])
-                        self.planets.append(Planet(jplanet["radius"], jplanet["mass"],jpos, jplanet["type"]))
-                elif decoded_data["type"] == "update":
-                    if DEBUG:
-                        print("Update recieved from server.")
-                    jships = decoded_data["ships"]
-                    newShips = []
-                    for jship in jships:
-                        ship = next((s for s in self.ships if s.name == jship["name"]), None)
-                        if ship is None:
-                            ship = Ship()
-                            ship.name = jship['name']
-                        else:
-                            ship.pos.x = jship['pos']['x']
-                            ship.pos.y = jship['pos']['y']
-                            ship.rpos = jship['pos']['r']
-                        newShips.append(ship)
-                    self.ships = newShips
+            try:
+                data = Program.readJSON(self.socket)
+                if not data == None:
+                    decoded_data = json.JSONDecoder().decode(data)
+                    if decoded_data["type"] == "map":
+                        self.planets.clear()
+                        for jplanet in decoded_data["planets"]:
+                            jpos = Vector(jplanet["pos"]["x"], jplanet["pos"]["y"])
+                            self.planets.append(Planet(jplanet["radius"], jplanet["mass"],jpos, jplanet["type"]))
+                    elif decoded_data["type"] == "update":
+                        if DEBUG:
+                            print("Update recieved from server.")
+                        jships = decoded_data["ships"]
+                        newShips = []
+                        for jship in jships:
+                            ship = next((s for s in self.ships if s.name == jship["name"]), None)
+                            if ship is None:
+                                ship = Ship()
+                                ship.name = jship['name']
+                            else:
+                                ship.pos.x = jship['pos']['x']
+                                ship.pos.y = jship['pos']['y']
+                                ship.rpos = jship['pos']['r']
+                            newShips.append(ship)
+                        self.ships = newShips
+            except Exception:
+                print("Server sent me a duff packet...")
 
     def listenForNewClients(self):
         self.socket.bind(("0.0.0.0", Program.PORT))

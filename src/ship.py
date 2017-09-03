@@ -159,16 +159,16 @@ class Ship(Thing):
 
     def show(self, screen, sound):
         # Sounds
-        if self.key_left:
-            self.portTurn = True
-        if self.key_right:
-            self.starboardTurn = True
-        if self.key_up:
-            self.thrusting = True
-        if self.key_down:
-            self.boosting = True
-        if self.key_space:
-            self.firing = True
+        # if self.key_left:
+        #     self.portTurn = True
+        # if self.key_right:
+        #     self.starboardTurn = True
+        # if self.key_up:
+        #     self.thrusting = True
+        # if self.key_down:
+        #     self.boosting = True
+        # if self.key_space:
+        #     self.firing = True
 
         if self.firing:
             globals.sounds.play(Sound.Fire)
