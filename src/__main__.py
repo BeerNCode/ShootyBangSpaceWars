@@ -106,8 +106,9 @@ class Program:
                 self.render()
 
                 if not self.server:
-                    self.screen.blit(globals.Fonts.TITLE.render(str(self.frames), True, globals.WHITE), [Program.SCREEN_WIDTH-100, 10])
-                    self.screen.blit(globals.Fonts.TITLE.render(str(self.player.damage), True, globals.WHITE), [Program.SCREEN_WIDTH-100, 20])
+                    self.screen.blit(globals.Fonts.INFO.render("Frame: "+str(self.frames), True, globals.WHITE), [Program.SCREEN_WIDTH-150, 10])
+                    self.screen.blit(globals.Fonts.INFO.render("Energy: "+"{:10.4f}".format(self.player.energy), True, globals.WHITE), [Program.SCREEN_WIDTH-150, 30])
+                    self.screen.blit(globals.Fonts.INFO.render("Pos: "+"{:10.2f}".format(self.player.pos.x)+" "+"{:10.2f}".format(self.player.pos.y), True, globals.WHITE), [Program.SCREEN_WIDTH-100, 50])
 
                 pygame.display.flip()
 
@@ -139,6 +140,7 @@ class Program:
         print("Setting ship name to :"+self.player.name)
         self.ships.append(self.player)
 
+        duffpackets = 0
         while self.running:
             try:
                 data = Program.readJSON(self.socket)
@@ -167,7 +169,8 @@ class Program:
                             newShips.append(ship)
                         self.ships = newShips
             except Exception:
-                print("Server sent me a duff packet...")
+                duffpackets+=1
+                print("Server sent me its "+duffpackets+" duff packet...")
 
     def listenForNewClients(self):
         self.socket.bind(("0.0.0.0", Program.PORT))
@@ -250,8 +253,9 @@ class Program:
                 self.running = False
                 self.screen.fill(globals.WHITE)
             if event.type == pygame.VIDEORESIZE:
-                self.screen = pygame.display.set_mode((event.w, event.h),
-                                                  pygame.RESIZABLE) 
+                Program.SCREEN_HEIGHT = event.h
+                Program.SCREEN_WIDTH = event.w
+                self.screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE) 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     done = True

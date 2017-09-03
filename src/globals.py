@@ -16,6 +16,7 @@ uname = getpass.getuser()
 class Fonts:
     pygame.font.init()
     TITLE = pygame.font.SysFont('Calibri', 25, True, False)
+    INFO = pygame.font.SysFont('Calibri', 15, True, False)
 
 
 sounds = Sounds()
