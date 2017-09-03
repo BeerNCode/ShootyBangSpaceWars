@@ -79,7 +79,7 @@ class Program:
 
     def loadMap(self):
             for iq in range(0,3):
-                self.planets.append(Planet(20, 40, Vector(0.1*globals.MAP_WIDTH, 0.1*globals.MAP_HEIGHT)))
+                self.planets.append(Planet(random.random()*100+50, 400, Vector(random.random()*Program.SCREEN_WIDTH, random.random()*Program.SCREEN_HEIGHT)))
             self.lightSources.append(LightSource(Vector(100,100),1))
 
     def run(self):
@@ -104,6 +104,12 @@ class Program:
                     self.screen.blit(globals.Fonts.TITLE.render(str(self.player.damage), True, globals.WHITE), [Program.SCREEN_WIDTH-100, 20])
 
                 pygame.display.flip()
+
+                if not self.server and self.frames > 1 and self.ships != None:
+                    for ship in self.ships:
+                        self.updateShip(ship,json.JSONDecoder().decode(self.player.getInputs().toJSON()))
+
+
             except Exception:
                 self.running = False
                 exc_type, exc_value, exc_traceback = sys.exc_info()
@@ -148,7 +154,7 @@ class Program:
                     self.ships = newShips
 
     def listenForNewClients(self):
-        self.socket.bind(("localhost", Program.PORT))
+        self.socket.bind(("0.0.0.0", Program.PORT))
         self.socket.listen(5)
 
         while self.running:
@@ -255,15 +261,17 @@ class Program:
 
     def updateShips(self):
         for client in self.clients:
-            ship = client.ship
-            ship.setInputs(client.keys)
-            ship.update_gravity(self.planets)
-            ship.update_regen(self.lightSources)
-            for planet in self.planets:
-                Damage.determineThingPlanetDamage(ship, planet)
-            newSlugs = ship.update()
-            for slug in newSlugs:
-                self.slugs.append(slug)
+            self.updateShip(client.ship,client.keys)
+
+    def updateShip(self,ship,keys):
+        ship.setInputs(keys)
+        ship.update_gravity(self.planets)
+        ship.update_regen(self.lightSources)
+        for planet in self.planets:
+            Damage.determineThingPlanetDamage(ship, planet)
+        newSlugs = ship.update()
+        for slug in newSlugs:
+            self.slugs.append(slug)
 
     def updateSlugs(self):
         for slug in self.slugs:
