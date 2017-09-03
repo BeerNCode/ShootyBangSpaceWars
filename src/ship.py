@@ -101,7 +101,6 @@ class Ship(Thing):
             if (self.energy >= SLUG_ENERGY):
                 newSlugs.append(Slug(self.pos,self.vel.add(Vector.fromAngle(self.rpos).mult(SLUG_SPEED)), self.rpos))
                 self.energy -= SLUG_ENERGY
-                globals.sounds.play(Sound.Fire)
             firing = True
         if (self.energy < ENERGYCAP):
             self.energy += ENERGY_REGEN
@@ -115,8 +114,6 @@ class Ship(Thing):
         else:
             self.fullBurn = False
             
-        if (self.fullBurn or self.thrusting or self.boosting or self.portTurn or self.starboardTurn):
-            globals.sounds.play(Sound.Thrust)
 
         thrust = Vector(0,0)
         if self.fullBurn:
@@ -144,7 +141,24 @@ class Ship(Thing):
         super().update()
         return newSlugs
 
-    def show(self, screen):
+    def show(self, screen, sound):
+        # Sounds
+        if self.key_left:
+            self.portTurn = True
+        if self.key_right:
+            self.starboardTurn = True
+        if self.key_up:
+            self.thrusting = True
+        if self.key_down:
+            self.boosting = True
+        if self.key_space:
+            self.firing = True
+
+        if self.firing:
+            globals.sounds.play(Sound.Fire)
+        if (self.fullBurn or self.thrusting or self.boosting or self.portTurn or self.starboardTurn):
+            globals.sounds.play(Sound.Thrust)
+        
         self.set_sprite("base")
         if self.fullBurn:
             self.set_sprite("FULLBURN")
@@ -166,14 +180,16 @@ class Ship(Thing):
             else:
                 self.set_sprite("base")
         font = pygame.font.SysFont('Calibri', 12, True, False)
+        bar_step = 0.5
         screen.blit(font.render(globals.uname, True, WHITE), [bar_step, 10])
         bar_width = 32
         bar_height = 5
         bar_margin = 1
-        if self.energy > 0:
-            pygame.draw.rect(screen, ENERGY_COLOUR, [bar_step, text_fudge_height + bar_margin, self.energy*bar_width/100, bar_height], 0)
-        if self.hull > 0:
-            pygame.draw.rect(screen, HEALTH_COLOUR, [bar_step, text_fudge_height + 2 * bar_margin + bar_height, self.hull*bar_width/100, bar_height], 0)
+        text_fudge_height = 26
+        # if self.energy > 0:
+        #     pygame.draw.rect(screen, ENERGY_COLOUR, [bar_step, text_fudge_height + bar_margin, self.energy*bar_width/100, bar_height], 0)
+        # if self.hull > 0:
+        #     pygame.draw.rect(screen, HEALTH_COLOUR, [bar_step, text_fudge_height + 2 * bar_margin + bar_height, self.hull*bar_width/100, bar_height], 0)
     
     def update_regen(self, lightSources):
         if (self.energy <= ENERGYCAP*2):

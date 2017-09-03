@@ -40,15 +40,16 @@ class Program:
     HOST = "localhost"
     PORT = 15007
 
-    pygame.display.set_caption("Shooty Bang Space Wars")
 
     screenSize = (SCREEN_WIDTH, SCREEN_HEIGHT)
     screen = pygame.display.set_mode(screenSize, pygame.RESIZABLE)
 
     def __init__(self, server):
         if server:
+            pygame.display.set_caption("Shooty Bang Space Wars - SERVER")
             print("Running in SERVER mode")
         else:
+            pygame.display.set_caption("Shooty Bang Space Wars")
             print("Running in CLIENT mode")
         self.clock = pygame.time.Clock()
         size = (Program.SCREEN_WIDTH, Program.SCREEN_HEIGHT)
@@ -241,7 +242,8 @@ class Program:
             self.viewport.updateMidPoint(self.player.pos)
         for idx, ship in enumerate(self.ships):
             ship.render(self.viewport)
-            path = Spline(ship,self.planets)
+            ship.show(self.screen, not self.server)
+            path = Spline(ship, self.planets)
             splinePoints = path.get_prediction(30)
             for RenderablePoint in splinePoints:
                 RenderablePoint.render(self.viewport)
