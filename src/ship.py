@@ -53,24 +53,23 @@ class Ship(Thing):
         self.key_right = False
         self.key_space = False
 
-
-    def add_sprite(self, id, filePath, background):
+    def add_sprite(self, spriteid, filePath, background):
         sp = pygame.image.load(filePath).convert()
         sp = pygame.transform.rotate(sp, -90)
         sp.set_colorkey(background)
-        self.sprites[id] = sp
+        self.sprites[spriteid] = sp
 
-    def set_sprite(self, id):
-        self.original_image = self.sprites[id]
+    def set_sprite(self, spriteid):
+        self.original_image = self.sprites[spriteid]
 
     def setInputs(self, keys):
         if (keys == None):
             return
-        self.key_up = keys['up']#keys.up
-        self.key_down = keys['down']#keys.down
-        self.key_left = keys['left']#keys.left
-        self.key_right = keys['right']#keys.right
-        self.key_space = keys['space']#keys.space
+        self.key_up = keys['up']
+        self.key_down = keys['down']
+        self.key_left = keys['left']
+        self.key_right = keys['right']
+        self.key_space = keys['space']
 
     def getInputs(self):
         keys = pygame.key.get_pressed()
