@@ -47,6 +47,12 @@ class Ship(Thing):
         self.starboardTurn = False
         self.fullBurn = False
         self.firing = False
+        self.key_up = False
+        self.key_down = False
+        self.key_left = False
+        self.key_right = False
+        self.key_space = False
+
 
     def add_sprite(self, id, filePath, background):
         sp = pygame.image.load(filePath).convert()
@@ -70,14 +76,19 @@ class Ship(Thing):
         keys = pygame.key.get_pressed()
         keys_packet = packets.Controls()
         if keys[pygame.K_UP]:
+            self.key_up = True
             keys_packet.up = True
         if keys[pygame.K_DOWN]:
+            self.key_down = True
             keys_packet.down = True
         if keys[pygame.K_LEFT]:
+            self.key_left = True
             keys_packet.left = True
         if keys[pygame.K_RIGHT]:
+            self.key_right = True
             keys_packet.right = True
         if keys[pygame.K_SPACE]:
+            self.key_space = True
             keys_packet.space = True
         return keys_packet
 

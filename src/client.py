@@ -6,6 +6,6 @@ class Client():
         self.conn = conn
         self.addr = addr
         self.ship = ship
-        self.keys = dict()
+        self.keys = {"up":False, "down":False, "left":False, "right":False, "space":False}
 
         

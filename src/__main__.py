@@ -133,7 +133,8 @@ class Program:
                         jpos = Vector(jplanet["pos"]["x"], jplanet["pos"]["y"])
                         self.planets.append(Planet(jplanet["radius"], jplanet["mass"],jpos, jplanet["type"]))
                 elif decoded_data["type"] == "update":
-                    print("Update recieved from server.")
+                    if DEBUG:
+                        print("Update recieved from server.")
                     jships = decoded_data["ships"]
                     newShips = []
                     for jship in jships:
@@ -204,7 +205,7 @@ class Program:
 
     @staticmethod
     def readJSON(socket):
-        try:
+        try:            
             lb = socket.recv(4)
             l = int.from_bytes(lb, byteorder='big', signed=False)
             data = socket.recv(l).decode("utf-8")
