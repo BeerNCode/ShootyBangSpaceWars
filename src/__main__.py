@@ -40,7 +40,6 @@ class Program:
     HOST = "192.168.1.200"
     PORT = 15007
 
-
     screenSize = (SCREEN_WIDTH, SCREEN_HEIGHT)
     screen = pygame.display.set_mode(screenSize, pygame.RESIZABLE)
 

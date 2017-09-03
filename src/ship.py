@@ -163,18 +163,6 @@ class Ship(Thing):
         return newSlugs
 
     def show(self, screen, sound):
-        # Sounds
-        # if self.key_left:
-        #     self.portTurn = True
-        # if self.key_right:
-        #     self.starboardTurn = True
-        # if self.key_up:
-        #     self.thrusting = True
-        # if self.key_down:
-        #     self.boosting = True
-        # if self.key_space:
-        #     self.firing = True
-
         if self.firing:
             globals.sounds.play(Sound.Fire)
         if (self.fullBurn or self.thrusting or self.boosting or self.portTurn or self.starboardTurn):
@@ -208,8 +196,8 @@ class Ship(Thing):
         bar_height = 5
         bar_margin = 1
         text_fudge_height = 26
-        # if self.energy > 0:
-        #     pygame.draw.rect(screen, ENERGY_COLOUR, [bar_step, text_fudge_height + bar_margin, self.energy*bar_width/100, bar_height], 0)
+        if self.energy > 0:
+             pygame.draw.rect(screen, ENERGY_COLOUR, [bar_step, text_fudge_height + bar_margin, self.energy*bar_width/100, bar_height], 0)
         # if self.hull > 0:
         #     pygame.draw.rect(screen, HEALTH_COLOUR, [bar_step, text_fudge_height + 2 * bar_margin + bar_height, self.hull*bar_width/100, bar_height], 0)
     
