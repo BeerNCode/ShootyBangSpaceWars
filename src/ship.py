@@ -58,11 +58,11 @@ class Ship(Thing):
         self.original_image = self.sprites[id]
 
     def setInputs(self, keys):
-        self.key_up = keys.up
-        self.key_down = keys.down
-        self.key_left = keys.left
-        self.key_right = keys.right
-        self.key_space = keys.space
+        self.key_up = keys['up']#keys.up
+        self.key_down = keys['down']#keys.down
+        self.key_left = keys['left']#keys.left
+        self.key_right = keys['right']#keys.right
+        self.key_space = keys['space']#keys.space
 
     def getInputs(self):
         keys = pygame.key.get_pressed()
