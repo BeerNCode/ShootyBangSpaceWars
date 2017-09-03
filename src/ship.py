@@ -98,7 +98,12 @@ class Ship(Thing):
         return keys_packet
 
     def update(self):
-        
+        self.portTurn = False
+        self.starboardTurn = False
+        self.thrusting = False
+        self.firing = False
+        self.boosting = False
+
         if self.key_left:
             self.portTurn = True
         if self.key_right:
@@ -195,6 +200,7 @@ class Ship(Thing):
                 self.set_sprite("Clockwise")
             else:
                 self.set_sprite("base")
+
         font = pygame.font.SysFont('Calibri', 12, True, False)
         bar_step = 0.5
         screen.blit(font.render(globals.uname, True, WHITE), [bar_step, 10])
