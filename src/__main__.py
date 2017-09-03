@@ -37,9 +37,6 @@ class Program:
     SCREEN_WIDTH = 1024
     SCREEN_HEIGHT = 768
     GAME_SPEED = 30
-    HOST = "192.168.1.200"
-    PORT = 15007
-
 
     screenSize = (SCREEN_WIDTH, SCREEN_HEIGHT)
     screen = pygame.display.set_mode(screenSize, pygame.RESIZABLE)
@@ -126,11 +123,7 @@ class Program:
     def listenToServer(self):
         """ Listens to the server for updates to the world """
         print("Connecting...")
-        # attempts = 0
-        # while self.running:
-        #     try:
-        #         print("Trying to connect...("+attempts+" attempt)")
-        self.socket.connect((Program.HOST, Program.PORT))
+        self.socket.connect((globals.network.serverIp, globals.PORT))
         #         break
         #     except:
         #         attempts+=1
@@ -171,7 +164,7 @@ class Program:
                 print("Server sent me a duff packet...")
 
     def listenForNewClients(self):
-        self.socket.bind(("0.0.0.0", Program.PORT))
+        self.socket.bind(("0.0.0.0", globals.PORT))
         self.socket.listen(5)
         self.socket.settimeout(1000)
         while self.running:

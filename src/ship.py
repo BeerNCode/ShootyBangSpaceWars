@@ -53,24 +53,23 @@ class Ship(Thing):
         self.key_right = False
         self.key_space = False
 
-
-    def add_sprite(self, id, filePath, background):
+    def add_sprite(self, spriteid, filePath, background):
         sp = pygame.image.load(filePath).convert()
         sp = pygame.transform.rotate(sp, -90)
         sp.set_colorkey(background)
-        self.sprites[id] = sp
+        self.sprites[spriteid] = sp
 
-    def set_sprite(self, id):
-        self.original_image = self.sprites[id]
+    def set_sprite(self, spriteid):
+        self.original_image = self.sprites[spriteid]
 
     def setInputs(self, keys):
         if (keys == None):
             return
-        self.key_up = keys['up']#keys.up
-        self.key_down = keys['down']#keys.down
-        self.key_left = keys['left']#keys.left
-        self.key_right = keys['right']#keys.right
-        self.key_space = keys['space']#keys.space
+        self.key_up = keys['up']
+        self.key_down = keys['down']
+        self.key_left = keys['left']
+        self.key_right = keys['right']
+        self.key_space = keys['space']
 
     def getInputs(self):
         keys = pygame.key.get_pressed()
@@ -163,18 +162,6 @@ class Ship(Thing):
         return newSlugs
 
     def show(self, screen, sound):
-        # Sounds
-        # if self.key_left:
-        #     self.portTurn = True
-        # if self.key_right:
-        #     self.starboardTurn = True
-        # if self.key_up:
-        #     self.thrusting = True
-        # if self.key_down:
-        #     self.boosting = True
-        # if self.key_space:
-        #     self.firing = True
-
         if self.firing:
             globals.sounds.play(Sound.Fire)
         if (self.fullBurn or self.thrusting or self.boosting or self.portTurn or self.starboardTurn):
@@ -208,8 +195,8 @@ class Ship(Thing):
         bar_height = 5
         bar_margin = 1
         text_fudge_height = 26
-        # if self.energy > 0:
-        #     pygame.draw.rect(screen, ENERGY_COLOUR, [bar_step, text_fudge_height + bar_margin, self.energy*bar_width/100, bar_height], 0)
+        if self.energy > 0:
+             pygame.draw.rect(screen, ENERGY_COLOUR, [bar_step, text_fudge_height + bar_margin, self.energy*bar_width/100, bar_height], 0)
         # if self.hull > 0:
         #     pygame.draw.rect(screen, HEALTH_COLOUR, [bar_step, text_fudge_height + 2 * bar_margin + bar_height, self.hull*bar_width/100, bar_height], 0)
     
