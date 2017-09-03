@@ -98,6 +98,11 @@ class Program:
                 else:
                     self.sendServerUpdate()
 
+                if not self.server and self.frames > 1 and self.ships != None:
+                    for ship in self.ships:
+                        self.updateShip(ship,json.JSONDecoder().decode(self.player.getInputs().toJSON()))
+                    self.updateSlugs()
+
                 self.render()
 
                 if not self.server:
@@ -106,9 +111,7 @@ class Program:
 
                 pygame.display.flip()
 
-                if not self.server and self.frames > 1 and self.ships != None:
-                    for ship in self.ships:
-                        self.updateShip(ship,json.JSONDecoder().decode(self.player.getInputs().toJSON()))
+                
 
 
             except Exception:
@@ -160,23 +163,26 @@ class Program:
         self.socket.listen(5)
         self.socket.settimeout(1000)
         while self.running:
-            conn, addr = self.socket.accept()
-            ship = Ship()
-            ship.name = addr           
-            ship.pos = Vector(random.random()*1000, random.random()*1000)
-            self.ships.append(ship)
-            client = Client(conn, addr, ship)
-            client.conn.settimeout(1000)
-            client.listenThread = Thread(target=self.listenToClient, args=(client,))
-            client.listenThread.start()
-            self.clients.append(client)
+            try:
+                conn, addr = self.socket.accept()
+                ship = Ship()
+                ship.name = addr           
+                ship.pos = Vector(random.random()*1000, random.random()*1000)
+                self.ships.append(ship)
+                client = Client(conn, addr, ship)
+                client.conn.settimeout(1000)
+                client.listenThread = Thread(target=self.listenToClient, args=(client,))
+                client.listenThread.start()
+                self.clients.append(client)
 
-            print("Just had a connection from [",addr,"]")
-            data = packets.Map.toJSON(packets.Map.toPacket(self.planets))
-            data = Program.sendJSON(client.conn, data)
+                print("Just had a connection from [",addr,"]")
+                data = packets.Map.toJSON(packets.Map.toPacket(self.planets))
+                data = Program.sendJSON(client.conn, data)
+            except:
+                print("socket threw an exception")
 
     def listenToClient(self, client):
-        print("SERVER: Listneing to clint")
+        print("SERVER: Listneing to client")
         while self.running:
             data = Program.readJSON(client.conn)
             if not data is None:
@@ -299,10 +305,9 @@ if __name__ == "__main__":
     p.run()
 
 pygame.quit()
-# if p.server:
-#     p.newClientsThread.kill()
-#     for client in p.clients:
-#         client.listenThread.kill()
-# else:
-#     p.listenThread.kill()
+if p.server:
+    p.socket.close()
+    for client in p.clients:
+        client.conn.close()
 print("DONE AND DUSTED")
+sys.exit(0)
