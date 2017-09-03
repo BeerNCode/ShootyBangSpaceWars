@@ -164,6 +164,7 @@ class Program:
                                 ship.pos.x = jship['pos']['x']
                                 ship.pos.y = jship['pos']['y']
                                 ship.rpos = jship['pos']['r']
+                                ship.energy = jship['energy']
                             newShips.append(ship)
                         self.ships = newShips
             except Exception:
