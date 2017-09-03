@@ -37,18 +37,19 @@ class Program:
     SCREEN_WIDTH = 1024
     SCREEN_HEIGHT = 768
     GAME_SPEED = 30
-    HOST = "localhost"
+    HOST = "192.168.1.200"
     PORT = 15007
 
-    pygame.display.set_caption("Shooty Bang Space Wars")
 
     screenSize = (SCREEN_WIDTH, SCREEN_HEIGHT)
     screen = pygame.display.set_mode(screenSize, pygame.RESIZABLE)
 
     def __init__(self, server):
         if server:
+            pygame.display.set_caption("Shooty Bang Space Wars - SERVER")
             print("Running in SERVER mode")
         else:
+            pygame.display.set_caption("Shooty Bang Space Wars")
             print("Running in CLIENT mode")
         self.clock = pygame.time.Clock()
         size = (Program.SCREEN_WIDTH, Program.SCREEN_HEIGHT)
@@ -79,7 +80,7 @@ class Program:
 
     def loadMap(self):
             for iq in range(0,3):
-                self.planets.append(Planet(random.random()*100+50, 400, Vector(random.random()*Program.SCREEN_WIDTH, random.random()*Program.SCREEN_HEIGHT)))
+                 self.planets.append(Planet(random.random()*100+50, 400, Vector(random.random()*Program.SCREEN_WIDTH, random.random()*Program.SCREEN_HEIGHT)))
             self.lightSources.append(LightSource(Vector(100,100),1))
 
     def run(self):
@@ -138,7 +139,8 @@ class Program:
                         jpos = Vector(jplanet["pos"]["x"], jplanet["pos"]["y"])
                         self.planets.append(Planet(jplanet["radius"], jplanet["mass"],jpos, jplanet["type"]))
                 elif decoded_data["type"] == "update":
-                    print("Update recieved from server.")
+                    if DEBUG:
+                        print("Update recieved from server.")
                     jships = decoded_data["ships"]
                     newShips = []
                     for jship in jships:
@@ -156,15 +158,15 @@ class Program:
     def listenForNewClients(self):
         self.socket.bind(("0.0.0.0", Program.PORT))
         self.socket.listen(5)
-
+        self.socket.settimeout(1000)
         while self.running:
-            self.socket.settimeout(1000)
             conn, addr = self.socket.accept()
             ship = Ship()
             ship.name = addr           
             ship.pos = Vector(random.random()*1000, random.random()*1000)
             self.ships.append(ship)
             client = Client(conn, addr, ship)
+            client.conn.settimeout(1000)
             client.listenThread = Thread(target=self.listenToClient, args=(client,))
             client.listenThread.start()
             self.clients.append(client)
@@ -209,7 +211,7 @@ class Program:
 
     @staticmethod
     def readJSON(socket):
-        try:
+        try:            
             lb = socket.recv(4)
             l = int.from_bytes(lb, byteorder='big', signed=False)
             data = socket.recv(l).decode("utf-8")
@@ -245,7 +247,8 @@ class Program:
             self.viewport.updateMidPoint(self.player.pos)
         for idx, ship in enumerate(self.ships):
             ship.render(self.viewport)
-            path = Spline(ship,self.planets)
+            ship.show(self.screen, not self.server)
+            path = Spline(ship, self.planets)
             splinePoints = path.get_prediction(30)
             for RenderablePoint in splinePoints:
                 RenderablePoint.render(self.viewport)
@@ -296,4 +299,10 @@ if __name__ == "__main__":
     p.run()
 
 pygame.quit()
+# if p.server:
+#     p.newClientsThread.kill()
+#     for client in p.clients:
+#         client.listenThread.kill()
+# else:
+#     p.listenThread.kill()
 print("DONE AND DUSTED")
