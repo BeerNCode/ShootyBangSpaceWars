@@ -6,6 +6,6 @@ class Client():
         self.conn = conn
         self.addr = addr
         self.ship = ship
-        self.keys = packets.Controls()
+        self.keys = dict()
 
         
