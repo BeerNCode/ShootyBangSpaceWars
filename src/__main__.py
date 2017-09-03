@@ -103,10 +103,19 @@ class Program:
 
                 self.render()
 
+                line = 0
                 if not self.server:
-                    self.screen.blit(globals.Fonts.INFO.render("Frame: "+str(self.frames), True, globals.WHITE), [Program.SCREEN_WIDTH-150, 10])
-                    self.screen.blit(globals.Fonts.INFO.render("Energy: "+"{:10.4f}".format(self.player.energy), True, globals.WHITE), [Program.SCREEN_WIDTH-150, 30])
-                    self.screen.blit(globals.Fonts.INFO.render("Pos: "+"{:10.2f}".format(self.player.pos.x)+" "+"{:10.2f}".format(self.player.pos.y), True, globals.WHITE), [Program.SCREEN_WIDTH-100, 50])
+                    self.screen.blit(globals.Fonts.INFO.render("Energy: "+"{:10.4f}".format(self.player.energy), True, globals.WHITE), [Program.SCREEN_WIDTH-150, line*20])
+                    line+=1
+                    self.screen.blit(globals.Fonts.INFO.render("Pos: "+"{:10.2f}".format(self.player.pos.x)+" "+"{:10.2f}".format(self.player.pos.y), True, globals.WHITE), 
+                    [Program.SCREEN_WIDTH-150, line*20])
+                    line+=1
+                else:
+                    for client in self.clients:    
+                        self.screen.blit(globals.Fonts.INFO.render(client.addr, True, globals.WHITE), [Program.SCREEN_WIDTH-150, line*30])
+                        line+=1
+                self.screen.blit(globals.Fonts.INFO.render("Frame: "+str(self.frames), True, globals.WHITE), [Program.SCREEN_WIDTH-150, line*30])
+                line+=1
 
                 pygame.display.flip()
 
