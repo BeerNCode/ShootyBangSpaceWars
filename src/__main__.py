@@ -35,8 +35,6 @@ class Program:
     SCREEN_WIDTH = 1024
     SCREEN_HEIGHT = 768
     GAME_SPEED = 30
-    HOST = "localhost"
-    PORT = 15007
 
     pygame.display.set_caption("Shooty Bang Space Wars")
 
@@ -115,7 +113,7 @@ class Program:
     def listenToServer(self):
         """ Listens to the server for updates to the world """
         print("Connecting...")
-        self.socket.connect((Program.HOST, Program.PORT))
+        self.socket.connect((globals.network.serverIp, globals.PORT))
         ss = self.socket.getsockname()
         print("Listening to server for updates:"+ss[0])
         self.player.name = str(ss[0])
@@ -148,7 +146,7 @@ class Program:
                     self.ships = newShips
 
     def listenForNewClients(self):
-        self.socket.bind(("localhost", Program.PORT))
+        self.socket.bind(("0.0.0.0", globals.PORT))
         self.socket.listen(5)
 
         while self.running:
