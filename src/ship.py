@@ -27,7 +27,7 @@ class Ship(Thing):
         """ Construcz """
         Thing.__init__(self)
         self.sprites = {}
-        self.name = "ship"
+        self.name = globals.uname
         self.add_sprite("base", "../img/BaseSpaceship.png", WHITE)
         self.add_sprite("thrust", "../img/BaseSpaceshipForward.png", WHITE)
         self.add_sprite("Clockwise", "../img/BaseSpaceshipLeft.png", WHITE)
@@ -47,7 +47,6 @@ class Ship(Thing):
         self.starboardTurn = False
         self.fullBurn = False
         self.firing = False
-
 
     def add_sprite(self, id, filePath, background):
         sp = pygame.image.load(filePath).convert()
