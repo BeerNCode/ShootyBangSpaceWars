@@ -80,7 +80,7 @@ class Program:
 
     def loadMap(self):
             for iq in range(0,3):
-                self.planets.append(Planet(20, 40, Vector(0.1*globals.MAP_WIDTH, 0.1*globals.MAP_HEIGHT)))
+                 self.planets.append(Planet(random.random()*100+50, 400, Vector(random.random()*Program.SCREEN_WIDTH, random.random()*Program.SCREEN_HEIGHT)))
             self.lightSources.append(LightSource(Vector(100,100),1))
 
     def run(self):
