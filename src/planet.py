@@ -19,16 +19,18 @@ PLANETS = {
     'P6': pygame.Rect(135,135,65,65)
 }
 
-
 class Planet(pygame.sprite.Sprite):
     """ A large object which can impart gravity onto stuff """
 
-    def __init__(self, radius, mass, pos):
+    def __init__(self, radius, mass, pos, ptype=None):
         super().__init__()
         self.pos = pos
         self.radius = radius
         self.mass = mass
-        self.type = random.choice(list(PLANETS.keys()))
+        if ptype == None:
+            self.ptype = random.choice(list(PLANETS.keys()))
+        else:
+            self.ptype = ptype
         self.sprites = {}
         self.add_sprite("base", "../img/planets_transparent.png",WHITE)
         self.set_sprite("base")
@@ -37,9 +39,8 @@ class Planet(pygame.sprite.Sprite):
 
     def add_sprite(self, id, filePath, background):
         sp = pygame.image.load(filePath).convert_alpha()
-        sp.set_clip(PLANETS[self.type]) #Locate the sprite
+        sp.set_clip(PLANETS[self.ptype]) #Locate the sprite
         sp = sp.subsurface(sp.get_clip()) 
-        #sp = pygame.transform.rotate(sp, 0)
         sp = pygame.transform.scale(sp,[int(round(self.radius * 2)),int(round(self.radius * 2))])
         sp.set_colorkey(background)
         self.sprites[id] = sp

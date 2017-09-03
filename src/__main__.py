@@ -129,7 +129,7 @@ class Program:
                     self.planets.clear()
                     for jplanet in decoded_data["planets"]:
                         p = Vector(jplanet["pos"]["x"], jplanet["pos"]["y"])
-                        self.planets.append(Planet(jplanet["radius"], jplanet["mass"],p))
+                        self.planets.append(Planet(jplanet["radius"], jplanet["mass"],p, p.ptype))
                 elif decoded_data["type"] == "update":
                     print("Update recieved from server.")
                     jships = decoded_data["ships"]
@@ -140,8 +140,6 @@ class Program:
                             ship = Ship()# add info
                             ship.name = jship['name']
                         else:
-                            #update info
-                            ship.pos.x = 0
                             ship.pos.x = jship['pos']['x']
                             ship.pos.y = jship['pos']['x']
                             ship.rpos = jship['pos']['r']
@@ -155,6 +153,7 @@ class Program:
         while self.running:
             conn, addr = self.socket.accept()
             ship = Ship()
+            ship.name = addr           
             ship.pos = Vector(random.random()*1000, random.random()*1000)
             self.ships.append(ship)
             client = Client(conn, addr, ship)
@@ -164,10 +163,7 @@ class Program:
 
             print("Just had a connection from [",addr,"]")
             data = packets.Map.toJSON(packets.Map.toPacket(self.planets))
-            try:
-                data = Program.sendJSON(client.conn, data)
-            except:
-                print("Ouch :/")
+            data = Program.sendJSON(client.conn, data)
 
     def listenToClient(self, client):
         print("SERVER: Listneing to clint")
