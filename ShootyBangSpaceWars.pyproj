@@ -94,6 +94,7 @@
     <Content Include="snd\Take Off.wav" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\client.py" />
     <Compile Include="src\globals.py">
       <SubType>Code</SubType>
     </Compile>
