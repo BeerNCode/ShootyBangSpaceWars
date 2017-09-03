@@ -112,7 +112,7 @@ class Program:
                     line+=1
                 else:
                     for client in self.clients:    
-                        self.screen.blit(globals.Fonts.INFO.render(client.addr, True, globals.WHITE), [Program.SCREEN_WIDTH-150, line*30])
+                        self.screen.blit(globals.Fonts.INFO.render(str(client.addr), True, globals.WHITE), [Program.SCREEN_WIDTH-150, line*30])
                         line+=1
                 self.screen.blit(globals.Fonts.INFO.render("Frame: "+str(self.frames), True, globals.WHITE), [Program.SCREEN_WIDTH-150, line*30])
                 line+=1
