@@ -78,19 +78,19 @@ class Position():
         return Position(pos.x,pos.y,rpos)
 
 class Planet():
-    def __init__(self,pos,mass,radius,type):
+    def __init__(self,pos,mass,radius,ptype):
         self.pos = pos
         self.mass = mass
         self.radius = radius
-        self.type = type
+        self.ptype = ptype
 
     def toJSON(self):
-        return {"pos":self.pos.toJSON(),"mass":self.mass,"radius":self.radius,"type":self.type}
+        return {"pos":self.pos.toJSON(),"mass":self.mass,"radius":self.radius,"type":self.ptype}
 
     @staticmethod
     def toPacket(planet):
         pos = Position(planet.pos.x,planet.pos.y,0)
-        return Planet(pos,planet.mass,planet.radius,planet.type)
+        return Planet(pos,planet.mass,planet.radius,planet.ptype)
 
 class Controls():
     def __init__(self, left=False, right=False, up=False, down=False, space=False):

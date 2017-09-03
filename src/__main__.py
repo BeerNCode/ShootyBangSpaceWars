@@ -35,7 +35,7 @@ class Program:
     SCREEN_WIDTH = 1024
     SCREEN_HEIGHT = 768
     GAME_SPEED = 30
-    HOST = "192.168.1.245"
+    HOST = "localhost"
     PORT = 15007
 
     pygame.display.set_caption("Shooty Bang Space Wars")
@@ -72,10 +72,9 @@ class Program:
             self.newClientsThread = Thread(target=self.listenForNewClients)
             self.newClientsThread.start()
         else:
+            self.player = Ship()
             self.listenThread = Thread(target=self.listenToServer)
             self.listenThread.start()
-            self.player = Ship()
-            self.ships.append(self.player)
             self.lightSources.append(LightSource(Vector(300,300),1000))
 
     def loadMap(self):
@@ -85,14 +84,10 @@ class Program:
 
     def run(self):
         while self.running:
-            # if self.server:
-            #     print("SERVER: "+str(self.frames))
-            # else:
-            #     print("CLIENT: "+str(self.frames))
             try:
                 self.updateEvents()
                 if not self.running:
-                    print("No more looping..")
+                    print("Breaking out the main loop")
                     break
 
                 if self.server:
@@ -119,8 +114,14 @@ class Program:
 
     def listenToServer(self):
         """ Listens to the server for updates to the world """
-        print("Listening to server for updates")
+        print("Connecting...")
         self.socket.connect((Program.HOST, Program.PORT))
+        ss = self.socket.getsockname()
+        print("Listening to server for updates:"+ss[0])
+        self.player.name = str(ss[0])
+        print("Setting ship name to :"+self.player.name)
+        self.ships.append(self.player)
+
         while self.running:
             data = Program.readJSON(self.socket)
             if not data == None:
@@ -129,7 +130,7 @@ class Program:
                     self.planets.clear()
                     for jplanet in decoded_data["planets"]:
                         p = Vector(jplanet["pos"]["x"], jplanet["pos"]["y"])
-                        self.planets.append(Planet(jplanet["radius"], jplanet["mass"],p))
+                        self.planets.append(Planet(jplanet["radius"], jplanet["mass"],p, jplanet["type"]))
                 elif decoded_data["type"] == "update":
                     print("Update recieved from server.")
                     jships = decoded_data["ships"]
@@ -140,8 +141,6 @@ class Program:
                             ship = Ship()# add info
                             ship.name = jship['name']
                         else:
-                            #update info
-                            ship.pos.x = 0
                             ship.pos.x = jship['pos']['x']
                             ship.pos.y = jship['pos']['x']
                             ship.rpos = jship['pos']['r']
@@ -149,12 +148,13 @@ class Program:
                     self.ships = newShips
 
     def listenForNewClients(self):
-        self.socket.bind((Program.HOST, Program.PORT))
+        self.socket.bind(("localhost", Program.PORT))
         self.socket.listen(5)
 
         while self.running:
             conn, addr = self.socket.accept()
             ship = Ship()
+            ship.name = addr           
             ship.pos = Vector(random.random()*1000, random.random()*1000)
             self.ships.append(ship)
             client = Client(conn, addr, ship)
@@ -164,10 +164,7 @@ class Program:
 
             print("Just had a connection from [",addr,"]")
             data = packets.Map.toJSON(packets.Map.toPacket(self.planets))
-            try:
-                data = Program.sendJSON(client.conn, data)
-            except:
-                print("Ouch :/")
+            data = Program.sendJSON(client.conn, data)
 
     def listenToClient(self, client):
         print("SERVER: Listneing to clint")
