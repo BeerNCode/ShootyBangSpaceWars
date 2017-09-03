@@ -150,7 +150,7 @@ class Program:
                     self.ships = newShips
 
     def listenForNewClients(self):
-        self.socket.bind(("localhost", Program.PORT))
+        self.socket.bind(("0.0.0.0", Program.PORT))
         self.socket.listen(5)
 
         while self.running:

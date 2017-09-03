@@ -47,7 +47,7 @@ class Ship():
 
     @staticmethod
     def toPacket(ship):
-        name = "a"
+        name = ship.name
         pos = Position.toPacket(ship.pos, ship.rpos)
         vel = Position.toPacket(ship.vel, 0)
         energy = ship.energy
